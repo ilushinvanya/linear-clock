@@ -6,12 +6,10 @@ function windowResized() {
 let lines = []
 let clock;
 let widthBetweenLines;
-let all_lines = 60; // 1 minute = 60 sec
+let all_lines = 10; // 1 minute = 60 sec
 let center = 0;
 
-const date_now = Date.now();
-const start_date = Math.floor(date_now / 1000) * 1000 + 1000; // + sec
-const diff = start_date - date_now;
+
 
 const opacity = (currentX) => {
 	const rightDiff = width - currentX;
@@ -57,7 +55,7 @@ const printAtRight = (text, y, offset, lineHeight) => {
 	}
 }
 function format(date) {
-// , 'HH:mm:ss'
+	// 'HH:mm:ss'
 	const seconds = date.getSeconds();
 	const minutes = date.getMinutes();
 	const hours = date.getHours();
@@ -115,6 +113,7 @@ class Line {
 		}
 	}
 	update() {
+		this.pxDiff = widthBetweenLines / this.thousand; // сколько пикселей в одной милисекунде
 		const timeDiff = new Date - this.date;
 		this.x = center - (timeDiff * this.pxDiff);
 		this.isPast = timeDiff >= 0;
@@ -157,10 +156,6 @@ class Line {
 		const tWidth = textWidth(`${this.seconds}`);
 		text(`${this.seconds}` , this.x - (tWidth / 2), 314);
 
-		line(center, 0, center, height)
-		strokeWeight(2);
-		// stroke('black');
-		stroke('red');
 
 		// if(this.second === 2) {
 		// 	c.strokeStyle = `rgba(0,0,0,${ isFuture ? opacity(this.x) : 0 })`;
@@ -242,13 +237,16 @@ class Clock {
 		const tWidth = textWidth(textString);
 
 		// c.fillStyle = '#f2f4f6';
-		rect(center - (tWidth / 2) - 10, 250, tWidth + 20, 30);
-		fill('#f5f1f1');
-		rect(center - (tWidth / 2) - 10, 250, tWidth + 20, 30);
-		fill('#000');
+
+
+
+
+
+		rect(center - (tWidth / 2) - 10, height / 2, tWidth + 20, 30);
+		fill('#b63737');
 
 		// textFont('Arial', 20)
-		text(textString, center - (tWidth / 2), 270);
+		text(textString, center - (tWidth / 2), 320);
 
 		strokeWeight(2);
 		arc(center, 260, tWidth + 30, 0, 0, PI * 2, PIE);
@@ -266,23 +264,52 @@ class Clock {
 function setup() {
 	const c = createCanvas(windowWidth, windowHeight);
 	c.mouseClicked(mousePress);
+
+	init()
+	clock = new Clock();
+}
+function draw() {
+	background(255);
+
+	lines.forEach(line => {
+		line.update()
+	})
+	clock.update();
+
+
+
+
+
+
 	strokeWeight(2);
-	stroke('#000')
+	// stroke('black');
+	stroke('orange');
+	line(center, 0, center, height)
+	line(0, height / 2, width, height / 2)
+
+}
+function mousePress(event) {
+}
+function mouseWheel(event) {
+	if(event.delta > 0) all_lines++;
+	if(event.delta < 0) all_lines--;
+	init()
+
+
+
+}
+
+
+function init() {
 	widthBetweenLines = Math.floor(windowWidth / all_lines);
 	center = windowWidth / 2;
 
 
+	const date_now = Date.now();
+	const date = Math.floor(date_now / 1000) * 1000 // - center
 
-
-
-
-
-
-
-
-	const date = Date.now(); // - center
-
-	for (let i = 0; i <= all_lines; i++) {
+	lines = []
+	for (let i = 0; i <= all_lines / 2; i++) {
 		if(i === 0) {
 			lines.push(new Line(date))
 		}
@@ -296,42 +323,4 @@ function setup() {
 	lines.sort((a,b) => {
 		return a.x - b.x;
 	})
-	clock = new Clock();
 }
-function draw() {
-	background(255);
-
-	lines.forEach(line => {
-		line.update()
-	})
-	clock.update();
-}
-function mousePress(event) {
-}
-function mouseDragged() {
-}
-
-
-
-
-// const canvas = document.querySelector('canvas')
-// const c = canvas.getContext('2d')
-// width = window.innerWidth
-// canvas.height = 700;
-
-// const mouse = {
-// 	x: undefined,
-// 	y: undefined
-// }
-
-
-
-
-
-
-
-
-// setTimeout(() => {
-// 	init()
-// 	setInterval(animate, 1000 / widthBetweenLines)
-// }, diff)
