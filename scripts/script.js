@@ -6,8 +6,9 @@ function windowResized() {
 let lines = []
 let clock;
 let widthBetweenLines;
-let all_lines = 30; // 1 minute = 60 sec
-let center = 0;
+let all_lines = 60; // 1 minute = 60 sec
+let centerX = 0;
+let centerY = 0;
 let unit = 1000 // 1 sec difference between lines
 
 
@@ -32,7 +33,7 @@ const printAtCenter = (text, y, lineHeight) => {
 
 	for (let i = 0; i < lines.length; i++) {
 		const textWidth = c.measureText(lines[i]).width;
-		const x = center - (textWidth / 2);
+		const x = centerX - (textWidth / 2);
 		c.fillText(lines[i], x, y + (i*lineHeight) );
 	}
 }
@@ -63,27 +64,6 @@ function format(date) {
 	return `${hours}:${minutes}:${seconds}`;
 }
 
-class LineNew {
-	constructor(x, y) {
-		this.x = Math.round(x);
-		this.y = Math.round(y);
-	}
-	draw() {
-		stroke('#000')
-		noFill()
-		circle(this.x, this.y, 10)
-		noStroke()
-		fill('#000')
-		textFont('Arial', 30)
-		// text(' ' + this.x, this.x, this.y)
-		// text(' ' + this.y, this.x, this.y + 30)
-	}
-	drawLine(currentPointIndex) {
-		stroke('#00f')
-		line(this.x, this.y, points[currentPointIndex - 1].x, points[currentPointIndex - 1].y)
-	}
-}
-// Objects
 class Line {
 	constructor(date) {
 		this.date = date
@@ -95,27 +75,33 @@ class Line {
 
 		this.x = 0;
 
-		this.yStart = 220;
-		this.yEnd = 300;
+		this.yStart = centerY - 30;
+		this.yEnd = centerY + 30;
 
 		this.pxDiff = widthBetweenLines / unit; // сколько пикселей в одной милисекунде
 
 		if(this.seconds === 0) {
-			this.yStart = 200;
+			this.yStart = this.yStart - 20;
+			this.yEnd = this.yEnd + 20;
 
 			if(this.minutes === 0) {
-				this.yStart = 180;
+				this.yStart = this.yStart - 20;
+				this.yEnd = this.yEnd + 20;
 
 				if(this.hours === 0) {
-					this.yStart = 160;
+					this.yStart = this.yStart - 20;
+					this.yEnd = this.yEnd + 20;
 				}
 			}
 		}
 	}
 	update() {
+		// if(this.seconds !== 0){
+		// 	return;
+		// }
 		this.pxDiff = widthBetweenLines / unit; // сколько пикселей в одной милисекунде
 		const timeDiff = new Date - this.date;
-		this.x = center - (timeDiff * this.pxDiff);
+		this.x = centerX - (timeDiff * this.pxDiff);
 		this.isPast = timeDiff >= 0;
 		this.isFuture = timeDiff < 0;
 
@@ -130,38 +116,38 @@ class Line {
 		this.draw()
 	}
 	draw() {
-		// if(this.seconds !== 0){
-		// 	return;
-		// }
+		let lineColor;
+
 		if(this.isPast) {
 			// past
-			const color = '#7a795c';
-			stroke(color)
+			lineColor = '#7a795c';
+			stroke(lineColor)
 			strokeWeight(1)
-			fill(color)
+			// fill(color)
 		}
 		if(this.isFuture) {
 			// future
-			const color = '#3780c9';
-			stroke(color);
+			lineColor = '#3780c9';
+			stroke(lineColor);
 			// stroke('black');
 			strokeWeight(2);
-			fill(color);
+			// fill(color);
 		}
 
-		line(this.x, this.yStart, this.x, this.yEnd)
+		// fill('rgba(0,0,0,0)')
+		// if(this.x < centerX && this.x > centerX - widthBetweenLines / 2) {
+		// 	bezier(this.x, this.yStart, centerX, centerY, centerX, centerY, this.x, this.yEnd);
+		// }
+		// else {
+			line(this.x, this.yStart, this.x, this.yEnd)
+		// }
 
-
-		textFont('Arial', 8)
+		fill(lineColor)
 		noStroke()
+		textFont('Arial', 8)
 
 		const tWidth = textWidth(`${this.seconds}`);
-		// textAlign(CENTER);
-		text(`${this.seconds}`, this.x - tWidth / 2, 314);
-
-		// line(0, 37, width, 37);
-		// textAlign(CENTER, CENTER);
-		// text(`${this.hours}`, this.x, 314, width);
+		text(`${this.seconds}`, this.x - tWidth / 2, this.yEnd + 20);
 
 
 		// if(this.second === 2) {
@@ -228,9 +214,6 @@ class Line {
 		// 	}
 		// }
 	}
-
-
-
 }
 class Clock {
 	now = new Date;
@@ -239,30 +222,30 @@ class Clock {
 		this.draw();
 	}
 	draw() {
+		fill('rgba(185,185,185,0.28)');
+		circle(centerX, centerY, 120)
+
+
 		textFont('Arial', 12)
 		const textString = format(this.now);
 		const tWidth = textWidth(textString);
-
-		// c.fillStyle = '#f2f4f6';
-
+		const textCenter = tWidth / 2;
 
 
+		fill('rgba(255,255,255,0.36)');
 
+		const rectParams = {
+			x: centerX - textCenter - 10,
+			y: centerY - 15,
+			w: tWidth + 20,
+			h: 30,
+		}
+		// fill('#a6b2ee');
+		rect(rectParams.x, rectParams.y, rectParams.w, rectParams.h);
 
-		rect(center - (tWidth / 2) - 10, height / 2, tWidth + 20, 30);
-		fill('#b63737');
+		fill('#242426');
+		text(textString, centerX - textCenter, centerY + 4);
 
-		// textFont('Arial', 20)
-		text(textString, center - (tWidth / 2), 320);
-
-		strokeWeight(2);
-		arc(center, 260, tWidth + 30, 0, 0, PI * 2, PIE);
-		fill('#000');
-		arc(center, 260, tWidth + 22, 0, 0, PI, PIE);
-		fill('#000');
-
-		stroke('#000')
-		fill('#000');
 	}
 }
 
@@ -271,7 +254,8 @@ class Clock {
 function setup() {
 	const c = createCanvas(windowWidth, windowHeight);
 	c.mouseClicked(mousePress);
-	center = width / 2;
+	centerX = width / 2;
+	centerY = height / 2;
 	clock = new Clock();
 	init()
 }
@@ -283,24 +267,22 @@ function draw() {
 	})
 	clock.update();
 
-
-
-
-
-
-	strokeWeight(2);
-	// stroke('black');
-	stroke('orange');
-	line(center, 0, center, height)
-	line(0, height / 2, width, height / 2)
+	strokeWeight(1);
+	stroke('rgba(0,0,0,0.2)');
+	line(centerX, 0, centerX, height)
+	line(0, centerY, width, centerY)
 
 }
 function mousePress(event) {
 }
 function mouseWheel(event) {
-	if(event.delta > 0) all_lines++;
+	if(event.delta > 0) all_lines += event.delta;
 	if(event.delta < 0) {
-		if(all_lines > 4) all_lines--;
+		if(all_lines > 4) all_lines += event.delta;
+	}
+	if(all_lines > 60 * 5) {
+		unit = 60 * 1000
+		all_lines = 5
 	}
 	init()
 }
@@ -309,11 +291,10 @@ function mouseWheel(event) {
 function init() {
 	widthBetweenLines = width / all_lines;
 
-
 	const date_now = new Date;
-	const date = Math.floor(date_now / 1000) * 1000 // - center
+	const date = Math.floor(date_now / 1000) * 1000 // - centerX
 
-	let first_sec_on_display = date - (all_lines / 2) * unit
+	let first_sec_on_display = date - (all_lines * unit) / 2;
 	lines = Array(all_lines).fill('').map((line, index) => {
 		return new Line(first_sec_on_display + index * unit)
 	});
