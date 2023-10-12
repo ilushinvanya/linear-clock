@@ -6,8 +6,9 @@ function windowResized() {
 let lines = []
 let clock;
 let widthBetweenLines;
-let all_lines = 10; // 1 minute = 60 sec
+let all_lines = 30; // 1 minute = 60 sec
 let center = 0;
+let unit = 1000 // 1 sec difference between lines
 
 
 
@@ -97,8 +98,7 @@ class Line {
 		this.yStart = 220;
 		this.yEnd = 300;
 
-		this.thousand = 1000 // одна секунда
-		this.pxDiff = widthBetweenLines / this.thousand; // сколько пикселей в одной милисекунде
+		this.pxDiff = widthBetweenLines / unit; // сколько пикселей в одной милисекунде
 
 		if(this.seconds === 0) {
 			this.yStart = 200;
@@ -113,19 +113,21 @@ class Line {
 		}
 	}
 	update() {
-		this.pxDiff = widthBetweenLines / this.thousand; // сколько пикселей в одной милисекунде
+		this.pxDiff = widthBetweenLines / unit; // сколько пикселей в одной милисекунде
 		const timeDiff = new Date - this.date;
 		this.x = center - (timeDiff * this.pxDiff);
 		this.isPast = timeDiff >= 0;
 		this.isFuture = timeDiff < 0;
 
-		this.draw()
-
-		if(this.x < -widthBetweenLines) {
-			lines.shift();
+		if(this.x < 0) {
+			lines = lines.filter((line, index) => {
+				return index;
+			})
 			const last_elem = lines[lines.length - 1];
-			lines.push(new Line(last_elem.date + 1000));
+			if(!last_elem) return;
+			lines.push(new Line(last_elem.date + unit));
 		}
+		this.draw()
 	}
 	draw() {
 		// if(this.seconds !== 0){
@@ -154,7 +156,12 @@ class Line {
 		noStroke()
 
 		const tWidth = textWidth(`${this.seconds}`);
-		text(`${this.seconds}` , this.x - (tWidth / 2), 314);
+		// textAlign(CENTER);
+		text(`${this.seconds}`, this.x - tWidth / 2, 314);
+
+		// line(0, 37, width, 37);
+		// textAlign(CENTER, CENTER);
+		// text(`${this.hours}`, this.x, 314, width);
 
 
 		// if(this.second === 2) {
@@ -264,9 +271,9 @@ class Clock {
 function setup() {
 	const c = createCanvas(windowWidth, windowHeight);
 	c.mouseClicked(mousePress);
-
-	init()
+	center = width / 2;
 	clock = new Clock();
+	init()
 }
 function draw() {
 	background(255);
@@ -292,35 +299,22 @@ function mousePress(event) {
 }
 function mouseWheel(event) {
 	if(event.delta > 0) all_lines++;
-	if(event.delta < 0) all_lines--;
+	if(event.delta < 0) {
+		if(all_lines > 4) all_lines--;
+	}
 	init()
-
-
-
 }
 
 
 function init() {
-	widthBetweenLines = Math.floor(windowWidth / all_lines);
-	center = windowWidth / 2;
+	widthBetweenLines = width / all_lines;
 
 
-	const date_now = Date.now();
+	const date_now = new Date;
 	const date = Math.floor(date_now / 1000) * 1000 // - center
 
-	lines = []
-	for (let i = 0; i <= all_lines / 2; i++) {
-		if(i === 0) {
-			lines.push(new Line(date))
-		}
-		else {
-			const next_second = date + i * 1000;
-			const prev_second = date - i * 1000;
-			lines.push(new Line(next_second))
-			lines.push(new Line(prev_second))
-		}
-	}
-	lines.sort((a,b) => {
-		return a.x - b.x;
-	})
+	let first_sec_on_display = date - (all_lines / 2) * unit
+	lines = Array(all_lines).fill('').map((line, index) => {
+		return new Line(first_sec_on_display + index * unit)
+	});
 }
