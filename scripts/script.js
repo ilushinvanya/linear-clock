@@ -11,57 +11,12 @@ let centerX = 0;
 let centerY = 0;
 let unit = 1000 // 1 sec difference between lines
 
-
-
-const opacity = (currentX) => {
-	const rightDiff = width - currentX;
-	if(rightDiff < 100) {
-		return rightDiff / 100;
-	}
-
-	const leftDiff = currentX;
-	// const leftDiff = (0 - currentX)*-1;
-	if(leftDiff < 100) {
-		return leftDiff / 100;
-	}
-
-	return 1;
-}
-const printAtCenter = (text, y, lineHeight) => {
-	const lines = text.split('\n');
-	// const lineHeight = 15;
-
-	for (let i = 0; i < lines.length; i++) {
-		const textWidth = c.measureText(lines[i]).width;
-		const x = centerX - (textWidth / 2);
-		c.fillText(lines[i], x, y + (i*lineHeight) );
-	}
-}
-const printAtLeft = (text, y, offset, lineHeight) => {
-	const lines = text.split('\n');
-	// const lineHeight = 16;
-
-	for (let i = 0; i < lines.length; i++) {
-		// const lineHeight = c.measureText(lines[i]).actualBoundingBoxDescent;
-		c.fillText(lines[i], offset, y + (i * lineHeight));
-	}
-}
-const printAtRight = (text, y, offset, lineHeight) => {
-	const lines = text.split('\n');
-	// const lineHeight = 16;
-
-	for (let i = 0; i < lines.length; i++) {
-		const lineWidth = textWidth(lines[i]);
-		const x = width - lineWidth - offset;
-		text(lines[i], x, y + (i * lineHeight));
-	}
-}
 function format(date) {
 	// 'HH:mm:ss'
 	const seconds = date.getSeconds();
 	const minutes = date.getMinutes();
 	const hours = date.getHours();
-	return `${hours}:${minutes}:${seconds}`;
+	return `${hours >= 10 ? hours : '0' + hours}:${minutes >= 10 ? minutes : '0' + minutes}:${seconds >= 10 ? seconds : '0' + seconds}`;
 }
 
 class Line {
@@ -72,6 +27,9 @@ class Line {
 		this.hours = new Date(this.date).getHours();
 		this.isPast = false;
 		this.isFuture = false;
+		this.isSecond = this.seconds !== 0;
+		this.isMinute = this.seconds === 0 && this.minutes !== 0;
+		this.isHour = this.seconds === 0 && this.minutes === 0;
 
 		this.x = 0;
 
@@ -89,6 +47,7 @@ class Line {
 				this.yEnd = this.yEnd + 20;
 
 				if(this.hours === 0) {
+					// новый день
 					this.yStart = this.yStart - 20;
 					this.yEnd = this.yEnd + 20;
 				}
@@ -96,12 +55,15 @@ class Line {
 		}
 	}
 	update() {
-		// if(this.seconds !== 0){
-		// 	return;
-		// }
+		if(widthBetweenLines < 6 && this.isSecond) {
+			return;
+		}
+		if(widthBetweenLines < 0.16 && this.isMinute) {
+			return;
+		}
 		this.pxDiff = widthBetweenLines / unit; // сколько пикселей в одной милисекунде
 		const timeDiff = new Date - this.date;
-		this.x = centerX - (timeDiff * this.pxDiff);
+		this.x = centerX - timeDiff * this.pxDiff;
 		this.isPast = timeDiff >= 0;
 		this.isFuture = timeDiff < 0;
 
@@ -119,23 +81,19 @@ class Line {
 		let lineColor;
 
 		if(this.isPast) {
-			// past
 			lineColor = '#7a795c';
 			stroke(lineColor)
 			strokeWeight(1)
-			// fill(color)
 		}
 		if(this.isFuture) {
-			// future
 			lineColor = '#3780c9';
 			stroke(lineColor);
 			// stroke('black');
 			strokeWeight(2);
-			// fill(color);
 		}
 
-		// fill('rgba(0,0,0,0)')
-		// if(this.x < centerX && this.x > centerX - widthBetweenLines / 2) {
+		fill('rgba(0,0,0,0)')
+		// if(centerX - widthBetweenLines / 2 < this.x && this.x < centerX) {
 		// 	bezier(this.x, this.yStart, centerX, centerY, centerX, centerY, this.x, this.yEnd);
 		// }
 		// else {
@@ -144,10 +102,12 @@ class Line {
 
 		fill(lineColor)
 		noStroke()
-		textFont('Arial', 8)
+		textFont('Arial', 5)
+		const number = this.isSecond ? this.seconds : this.isMinute ? this.minutes : this.isHour ? this.hours : 0;
+		const numberText = `${number}`
 
-		const tWidth = textWidth(`${this.seconds}`);
-		text(`${this.seconds}`, this.x - tWidth / 2, this.yEnd + 20);
+		const tWidth = textWidth(numberText);
+		text(numberText, this.x - tWidth / 2, this.yEnd + 20);
 
 
 		// if(this.second === 2) {
@@ -216,17 +176,23 @@ class Line {
 	}
 }
 class Clock {
-	now = new Date;
+	now = new Date(Math.floor(new Date / 1000) * 1000)
 	update() {
-		this.now = new Date;
+		this.now = new Date(Math.floor(new Date / 1000) * 1000)
 		this.draw();
 	}
 	draw() {
-		fill('rgba(185,185,185,0.28)');
-		circle(centerX, centerY, 120)
+		fill('rgba(255,255,255,0)')
+
+		for(let i = 8; i >= 2; i--) {
+			stroke(`rgba(80,0,180,0.${i})`)
+			strokeWeight(20)
+			arc(centerX, centerY, 520 - (i * 40), 520 - (i * 40), 0, TWO_PI)
+		}
 
 
-		textFont('Arial', 12)
+		noStroke()
+		textFont('Arial', 22)
 		const textString = format(this.now);
 		const tWidth = textWidth(textString);
 		const textCenter = tWidth / 2;
@@ -246,10 +212,22 @@ class Clock {
 		fill('#242426');
 		text(textString, centerX - textCenter, centerY + 4);
 
+		// line(centerX, 0, centerX, height)
+		// line(0, centerY, width, centerY)
+
 	}
 }
 
 
+function init() {
+	widthBetweenLines = width / all_lines;
+
+	let first_sec_on_display = clock.now - (all_lines * unit) / 2;
+	lines = Array(all_lines).fill('').map((line, index) => {
+		const lineDate = first_sec_on_display + index * unit
+		return new Line(lineDate)
+	});
+}
 
 function setup() {
 	const c = createCanvas(windowWidth, windowHeight);
@@ -267,35 +245,70 @@ function draw() {
 	})
 	clock.update();
 
-	strokeWeight(1);
-	stroke('rgba(0,0,0,0.2)');
-	line(centerX, 0, centerX, height)
-	line(0, centerY, width, centerY)
-
 }
 function mousePress(event) {
 }
 function mouseWheel(event) {
-	if(event.delta > 0) all_lines += event.delta;
-	if(event.delta < 0) {
-		if(all_lines > 4) all_lines += event.delta;
+	let delta = Math.round(event.delta);
+	if(delta % 2 !== 0) {
+		delta++
 	}
-	if(all_lines > 60 * 5) {
-		unit = 60 * 1000
-		all_lines = 5
+	if(delta > 0) all_lines += delta;
+	if(delta < 0) {
+		if(all_lines > 4) all_lines += delta;
+	}
+	if(all_lines <= 0) {
+		all_lines = 4
 	}
 	init()
 }
 
 
-function init() {
-	widthBetweenLines = width / all_lines;
 
-	const date_now = new Date;
-	const date = Math.floor(date_now / 1000) * 1000 // - centerX
 
-	let first_sec_on_display = date - (all_lines * unit) / 2;
-	lines = Array(all_lines).fill('').map((line, index) => {
-		return new Line(first_sec_on_display + index * unit)
-	});
+
+
+
+const opacity = (currentX) => {
+	const rightDiff = width - currentX;
+	if(rightDiff < 100) {
+		return rightDiff / 100;
+	}
+
+	const leftDiff = currentX;
+	// const leftDiff = (0 - currentX)*-1;
+	if(leftDiff < 100) {
+		return leftDiff / 100;
+	}
+
+	return 1;
+}
+const printAtCenter = (text, y, lineHeight) => {
+	const lines = text.split('\n');
+	// const lineHeight = 15;
+
+	for (let i = 0; i < lines.length; i++) {
+		const textWidth = c.measureText(lines[i]).width;
+		const x = centerX - (textWidth / 2);
+		c.fillText(lines[i], x, y + (i*lineHeight) );
+	}
+}
+const printAtLeft = (text, y, offset, lineHeight) => {
+	const lines = text.split('\n');
+	// const lineHeight = 16;
+
+	for (let i = 0; i < lines.length; i++) {
+		// const lineHeight = c.measureText(lines[i]).actualBoundingBoxDescent;
+		c.fillText(lines[i], offset, y + (i * lineHeight));
+	}
+}
+const printAtRight = (text, y, offset, lineHeight) => {
+	const lines = text.split('\n');
+	// const lineHeight = 16;
+
+	for (let i = 0; i < lines.length; i++) {
+		const lineWidth = textWidth(lines[i]);
+		const x = width - lineWidth - offset;
+		text(lines[i], x, y + (i * lineHeight));
+	}
 }
