@@ -6,16 +6,20 @@ function windowResized() {
 let lines = []
 let clock;
 let widthBetweenLines;
-let all_lines = 60; // 1 minute = 60 sec
+let all_lines = 100; // 1 minute = 60 sec
 let centerX = 0;
 let centerY = 0;
 let unit = 1000 // 1 sec difference between lines
-
+const SEC = 1000
+const MIN = 60 * 1000
+const HOUR = 60 * 60 * 1000
+const DAY = 24 * 60 * 60 * 1000
 function format(date) {
 	// 'HH:mm:ss'
 	const seconds = date.getSeconds();
 	const minutes = date.getMinutes();
 	const hours = date.getHours();
+	// return `${hours >= 10 ? hours : '0' + hours}:${minutes >= 10 ? minutes : '0' + minutes}`;
 	return `${hours >= 10 ? hours : '0' + hours}:${minutes >= 10 ? minutes : '0' + minutes}:${seconds >= 10 ? seconds : '0' + seconds}`;
 }
 
@@ -25,42 +29,41 @@ class Line {
 		this.seconds = new Date(this.date).getSeconds();
 		this.minutes = new Date(this.date).getMinutes();
 		this.hours = new Date(this.date).getHours();
+		this.days = new Date(this.date).getDate();
+		this.month = new Date(this.date).getMonth();
+		this.year = new Date(this.date).getFullYear();
 		this.isPast = false;
 		this.isFuture = false;
 		this.isSecond = this.seconds !== 0;
 		this.isMinute = this.seconds === 0 && this.minutes !== 0;
-		this.isHour = this.seconds === 0 && this.minutes === 0;
+		this.isHour = this.seconds === 0 && this.minutes === 0 && this.hours !== 0;
+		this.isDay = this.seconds === 0 && this.minutes === 0 && this.hours === 0 && this.days !== 0;
 
 		this.x = 0;
 
-		this.yStart = centerY - 30;
-		this.yEnd = centerY + 30;
+		this.yStart = centerY - 20;
+		this.yEnd = centerY + 20;
 
-		this.pxDiff = widthBetweenLines / unit; // сколько пикселей в одной милисекунде
+		this.pxDiff = widthBetweenLines / unit; // сколько пикселей в 1000 - одной милисекунде, 60 000  - одной секунде
 
-		if(this.seconds === 0) {
-			this.yStart = this.yStart - 20;
-			this.yEnd = this.yEnd + 20;
-
-			if(this.minutes === 0) {
-				this.yStart = this.yStart - 20;
-				this.yEnd = this.yEnd + 20;
-
-				if(this.hours === 0) {
-					// новый день
-					this.yStart = this.yStart - 20;
-					this.yEnd = this.yEnd + 20;
-				}
-			}
+		if(this.isMinute) {
+			this.yStart = this.yStart - 10;
+			this.yEnd = this.yEnd + 10;
 		}
+
+		if(this.isHour) {
+			this.yStart = this.yStart - 10;
+			this.yEnd = this.yEnd + 20;
+		}
+
+		if(this.isDay) {
+			// новый день
+			this.yStart = this.yStart - 10;
+			this.yEnd = this.yEnd + 30;
+		}
+
 	}
 	update() {
-		if(widthBetweenLines < 6 && this.isSecond) {
-			return;
-		}
-		if(widthBetweenLines < 0.16 && this.isMinute) {
-			return;
-		}
 		this.pxDiff = widthBetweenLines / unit; // сколько пикселей в одной милисекунде
 		const timeDiff = new Date - this.date;
 		this.x = centerX - timeDiff * this.pxDiff;
@@ -103,7 +106,7 @@ class Line {
 		fill(lineColor)
 		noStroke()
 		textFont('Arial', 5)
-		const number = this.isSecond ? this.seconds : this.isMinute ? this.minutes : this.isHour ? this.hours : 0;
+		const number = this.isSecond ? this.seconds : this.isMinute ? this.minutes : this.isHour ? this.hours : this.isDay ? this.days : 0;
 		const numberText = `${number}`
 
 		const tWidth = textWidth(numberText);
@@ -184,21 +187,20 @@ class Clock {
 	draw() {
 		fill('rgba(255,255,255,0)')
 
-		for(let i = 8; i >= 2; i--) {
-			stroke(`rgba(80,0,180,0.${i})`)
-			strokeWeight(20)
-			arc(centerX, centerY, 520 - (i * 40), 520 - (i * 40), 0, TWO_PI)
+		for(let i = 1; i >= 0.6; i -= 0.2) {
+			stroke(`rgba(55,128,201,${i})`)
+			strokeWeight(40)
+			arc(centerX, centerY, 620 - (i * 400), 620 - (i * 400), 0, TWO_PI)
 		}
 
 
 		noStroke()
-		textFont('Arial', 22)
+		textFont('Tahoma', 22)
 		const textString = format(this.now);
 		const tWidth = textWidth(textString);
 		const textCenter = tWidth / 2;
 
-
-		fill('rgba(255,255,255,0.36)');
+		fill('rgba(55,128,201,0.6)');
 
 		const rectParams = {
 			x: centerX - textCenter - 10,
@@ -210,8 +212,10 @@ class Clock {
 		rect(rectParams.x, rectParams.y, rectParams.w, rectParams.h);
 
 		fill('#242426');
-		text(textString, centerX - textCenter, centerY + 4);
+		text(textString, centerX - textCenter, centerY + 8);
 
+		// strokeWeight(1)
+		stroke(`rgba(55,128,201,1)`)
 		// line(centerX, 0, centerX, height)
 		// line(0, centerY, width, centerY)
 
@@ -225,7 +229,8 @@ function init() {
 	let first_sec_on_display = clock.now - (all_lines * unit) / 2;
 	lines = Array(all_lines).fill('').map((line, index) => {
 		const lineDate = first_sec_on_display + index * unit
-		return new Line(lineDate)
+		const floor = Math.floor(lineDate / unit) * unit
+		return new Line(floor)
 	});
 }
 
@@ -250,15 +255,45 @@ function mousePress(event) {
 }
 function mouseWheel(event) {
 	let delta = Math.round(event.delta);
-	if(delta % 2 !== 0) {
-		delta++
+	const lineLimit = 400
+	if(delta > 0) {
+		all_lines++;
+		if(all_lines > lineLimit) {
+			if(unit === SEC) {
+				unit = MIN
+				all_lines = Math.round(lineLimit / MIN / 1000)
+			}
+			else if(unit === MIN) {
+				unit = HOUR
+				all_lines = Math.round(lineLimit / HOUR / 1000)
+			}
+			else if(unit === HOUR) {
+				unit = DAY
+				all_lines = Math.round(lineLimit / DAY / 1000)
+			}
+			if(unit === DAY) {
+				console.log(all_lines)
+			}
+		}
 	}
-	if(delta > 0) all_lines += delta;
 	if(delta < 0) {
-		if(all_lines > 4) all_lines += delta;
-	}
-	if(all_lines <= 0) {
-		all_lines = 4
+		if(all_lines <= 10) {
+			if(unit === DAY) {
+				unit = HOUR
+				all_lines = lineLimit
+			}
+			else if(unit === HOUR) {
+				unit = MIN
+				all_lines = lineLimit
+			}
+			else if(unit === MIN) {
+				unit = SEC
+				all_lines = lineLimit
+			}
+		}
+		else {
+			all_lines--;
+		}
 	}
 	init()
 }
