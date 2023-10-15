@@ -1,6 +1,6 @@
 function windowResized() {
 	resizeCanvas(windowWidth, windowHeight);
-	// setup();
+	setup();
 }
 
 let lines = []
@@ -14,13 +14,50 @@ const SEC = 1000
 const MIN = 60 * 1000
 const HOUR = 60 * 60 * 1000
 const DAY = 24 * 60 * 60 * 1000
-function format(date) {
-	// 'HH:mm:ss'
-	const seconds = date.getSeconds();
-	const minutes = date.getMinutes();
-	const hours = date.getHours();
-	// return `${hours >= 10 ? hours : '0' + hours}:${minutes >= 10 ? minutes : '0' + minutes}`;
-	return `${hours >= 10 ? hours : '0' + hours}:${minutes >= 10 ? minutes : '0' + minutes}:${seconds >= 10 ? seconds : '0' + seconds}`;
+class Clock {
+	now = new Date(Math.floor(new Date / 1000) * 1000)
+	update() {
+		this.now = new Date(Math.floor(new Date / 1000) * 1000)
+		this.draw();
+	}
+	draw() {
+		fill('rgba(255,255,255,0)')
+
+		const roundedTo = unit === SEC ? 0.2 : unit === MIN ? 0.4 : unit === HOUR ? 0.7 : unit === DAY ? 0.9 : 0
+		for(let i = 0.2; i <= roundedTo; i += 0.2) {
+			stroke(`rgba(155,128,101,${1 - i})`)
+			// fill('pink')
+			strokeWeight(100)
+			arc(centerX, centerY, 100 + (i * 1000), 100 + (i * 1000), 0, TWO_PI)
+		}
+
+
+		noStroke()
+		textFont('Tahoma', 24)
+		const textString = format(this.now);
+		const tWidth = textWidth(textString);
+		const textCenter = tWidth / 2;
+
+		fill('rgba(155,128,101,0.6)');
+
+		const rectParams = {
+			x: centerX - textCenter - 10,
+			y: centerY - 15,
+			w: tWidth + 20,
+			h: 30,
+		}
+		// fill('#a6b2ee');
+		// rect(rectParams.x, rectParams.y, rectParams.w, rectParams.h);
+
+		fill('#242426');
+		text(textString, centerX - textCenter, centerY + 8);
+
+		// strokeWeight(1)
+		stroke(`rgba(55,128,201,1)`)
+		// line(centerX, 0, centerX, height)
+		// line(0, centerY, width, centerY)
+
+	}
 }
 
 class Line {
@@ -36,8 +73,10 @@ class Line {
 		this.isFuture = false;
 		this.isSecond = this.seconds !== 0;
 		this.isMinute = this.seconds === 0 && this.minutes !== 0;
-		this.isHour = this.seconds === 0 && this.minutes === 0 && this.hours !== 0;
-		this.isDay = this.seconds === 0 && this.minutes === 0 && this.hours === 0 && this.days !== 0;
+		this.isHour =   this.seconds === 0 && this.minutes === 0 && this.hours !== 0;
+		this.isDay =    this.seconds === 0 && this.minutes === 0 && this.hours === 0 && this.days !== 1;
+		this.isMonth =  this.seconds === 0 && this.minutes === 0 && this.hours === 0 && this.days === 1 && this.month !== 0;
+		this.isYear =   this.seconds === 0 && this.minutes === 0 && this.hours === 0 && this.days === 1 && this.month === 0;
 
 		this.x = 0;
 
@@ -47,19 +86,28 @@ class Line {
 		this.pxDiff = widthBetweenLines / unit; // сколько пикселей в 1000 - одной милисекунде, 60 000  - одной секунде
 
 		if(this.isMinute) {
-			this.yStart = this.yStart - 10;
-			this.yEnd = this.yEnd + 10;
+			this.yStart = this.yStart - 6;
+			// this.yEnd = this.yEnd + 6;
 		}
 
 		if(this.isHour) {
-			this.yStart = this.yStart - 10;
-			this.yEnd = this.yEnd + 20;
+			this.yStart = this.yStart - 12;
+			// this.yEnd = this.yEnd + 12;
 		}
 
 		if(this.isDay) {
-			// новый день
-			this.yStart = this.yStart - 10;
-			this.yEnd = this.yEnd + 30;
+			this.yStart = this.yStart - 18;
+			// this.yEnd = this.yEnd + 18;
+		}
+
+		if(this.isMonth) {
+			this.yStart = this.yStart - 24;
+			// this.yEnd = this.yEnd + 24;
+		}
+
+		if(this.isYear) {
+			this.yStart = this.yStart - 30;
+			// this.yEnd = this.yEnd + 30;
 		}
 
 	}
@@ -105,14 +153,39 @@ class Line {
 
 		fill(lineColor)
 		noStroke()
-		textFont('Arial', 5)
-		const number = this.isSecond ? this.seconds : this.isMinute ? this.minutes : this.isHour ? this.hours : this.isDay ? this.days : 0;
-		const numberText = `${number}`
+		textFont('Arial', 6)
+		const number =
+			this.isSecond ? this.seconds :
+				this.isMinute ? this.minutes :
+					this.isHour ? this.hours :
+						this.isDay ? this.days :
+							this.isMonth ? this.month :
+								this.isYear ? this.year : 0;
 
-		const tWidth = textWidth(numberText);
-		text(numberText, this.x - tWidth / 2, this.yEnd + 20);
+		const topText = (unit === SEC && !this.isSecond) ||
+		(unit === MIN && !this.isMinute) ||
+		(unit === HOUR && !this.isHour) ||
+		(unit === DAY && !this.isDay) ? `${number}` : '';
 
+		let bottomText = `${number}`
+		if(topText) {
+			bottomText = this.isMonth ? '1' : '0'
+		}
 
+		const topWidth = textWidth(topText);
+		const bottomWidth = textWidth(bottomText);
+
+		text(topText, this.x - topWidth / 2, this.yStart - 6);
+		text(bottomText, this.x - bottomWidth / 2, this.yEnd + 14);
+
+	}
+}
+
+class Note {
+	update() {
+
+	}
+	draw() {
 		// if(this.second === 2) {
 		// 	c.strokeStyle = `rgba(0,0,0,${ isFuture ? opacity(this.x) : 0 })`;
 		// 	c.lineWidth = 1
@@ -178,61 +251,7 @@ class Line {
 		// }
 	}
 }
-class Clock {
-	now = new Date(Math.floor(new Date / 1000) * 1000)
-	update() {
-		this.now = new Date(Math.floor(new Date / 1000) * 1000)
-		this.draw();
-	}
-	draw() {
-		fill('rgba(255,255,255,0)')
 
-		for(let i = 1; i >= 0.6; i -= 0.2) {
-			stroke(`rgba(55,128,201,${i})`)
-			strokeWeight(40)
-			arc(centerX, centerY, 620 - (i * 400), 620 - (i * 400), 0, TWO_PI)
-		}
-
-
-		noStroke()
-		textFont('Tahoma', 22)
-		const textString = format(this.now);
-		const tWidth = textWidth(textString);
-		const textCenter = tWidth / 2;
-
-		fill('rgba(55,128,201,0.6)');
-
-		const rectParams = {
-			x: centerX - textCenter - 10,
-			y: centerY - 15,
-			w: tWidth + 20,
-			h: 30,
-		}
-		// fill('#a6b2ee');
-		rect(rectParams.x, rectParams.y, rectParams.w, rectParams.h);
-
-		fill('#242426');
-		text(textString, centerX - textCenter, centerY + 8);
-
-		// strokeWeight(1)
-		stroke(`rgba(55,128,201,1)`)
-		// line(centerX, 0, centerX, height)
-		// line(0, centerY, width, centerY)
-
-	}
-}
-
-
-function init() {
-	widthBetweenLines = width / all_lines;
-
-	let first_sec_on_display = clock.now - (all_lines * unit) / 2;
-	lines = Array(all_lines).fill('').map((line, index) => {
-		const lineDate = first_sec_on_display + index * unit
-		const floor = Math.floor(lineDate / unit) * unit
-		return new Line(floor)
-	});
-}
 
 function setup() {
 	const c = createCanvas(windowWidth, windowHeight);
@@ -241,6 +260,19 @@ function setup() {
 	centerY = height / 2;
 	clock = new Clock();
 	init()
+}
+function init() {
+	widthBetweenLines = width / all_lines;
+
+	let first_sec_on_display = clock.now - (all_lines * unit) / 2;
+	lines = Array(all_lines).fill('').map((line, index) => {
+		const lineDate = first_sec_on_display + index * unit
+		let floor = Math.floor(lineDate / unit) * unit
+		if(unit === DAY) {
+			floor = new Date(floor).setHours(0);
+		}
+		return new Line(floor)
+	});
 }
 function draw() {
 	background(255);
@@ -261,18 +293,15 @@ function mouseWheel(event) {
 		if(all_lines > lineLimit) {
 			if(unit === SEC) {
 				unit = MIN
-				all_lines = Math.round(lineLimit / MIN / 1000)
+				all_lines = Math.round(lineLimit / (MIN / 1000))
 			}
 			else if(unit === MIN) {
 				unit = HOUR
-				all_lines = Math.round(lineLimit / HOUR / 1000)
+				all_lines = Math.round(lineLimit / (HOUR / 1000))
 			}
 			else if(unit === HOUR) {
 				unit = DAY
-				all_lines = Math.round(lineLimit / DAY / 1000)
-			}
-			if(unit === DAY) {
-				console.log(all_lines)
+				all_lines = Math.round(lineLimit / (DAY / 1000))
 			}
 		}
 	}
@@ -303,7 +332,18 @@ function mouseWheel(event) {
 
 
 
-
+function format(date) {
+	// 'HH:mm:ss'
+	const seconds = date.getSeconds();
+	const minutes = date.getMinutes();
+	const hours = date.getHours();
+	if(unit === SEC) {
+		return `${hours >= 10 ? hours : '0' + hours}:${minutes >= 10 ? minutes : '0' + minutes}:${seconds >= 10 ? seconds : '0' + seconds}`;
+	}
+	else {
+		return `${hours >= 10 ? hours : '0' + hours}:${minutes >= 10 ? minutes : '0' + minutes}`;
+	}
+}
 const opacity = (currentX) => {
 	const rightDiff = width - currentX;
 	if(rightDiff < 100) {
