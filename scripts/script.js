@@ -26,19 +26,21 @@ class Clock {
 		const roundedTo = unit === SEC ? 0.2 : unit === MIN ? 0.4 : unit === HOUR ? 0.7 : unit === DAY ? 0.9 : 0
 		for(let i = 0.2; i <= roundedTo; i += 0.2) {
 			stroke(`rgba(155,128,101,${1 - i})`)
-			// fill('pink')
-			strokeWeight(100)
-			arc(centerX, centerY, 100 + (i * 1000), 100 + (i * 1000), 0, TWO_PI)
+
+			const lineWeight = 40;
+			const arcParam = 100 + (i * lineWeight * 10)
+			strokeWeight(lineWeight)
+			arc(centerX, centerY, arcParam, arcParam, 0, TWO_PI)
 		}
 
 
 		noStroke()
-		textFont('Tahoma', 24)
+		textFont('Arial', 24)
 		const textString = format(this.now);
 		const tWidth = textWidth(textString);
 		const textCenter = tWidth / 2;
 
-		fill('rgba(155,128,101,0.6)');
+		fill('rgba(155,128,101,0.8)');
 
 		const rectParams = {
 			x: centerX - textCenter - 10,
@@ -46,14 +48,13 @@ class Clock {
 			w: tWidth + 20,
 			h: 30,
 		}
-		// fill('#a6b2ee');
-		// rect(rectParams.x, rectParams.y, rectParams.w, rectParams.h);
+		rect(rectParams.x, rectParams.y, rectParams.w, rectParams.h);
 
-		fill('#242426');
+		fill('#1f1f1f');
 		text(textString, centerX - textCenter, centerY + 8);
 
 		// strokeWeight(1)
-		stroke(`rgba(55,128,201,1)`)
+		// stroke(`rgba(55,128,201,1)`)
 		// line(centerX, 0, centerX, height)
 		// line(0, centerY, width, centerY)
 
