@@ -3,17 +3,22 @@ function windowResized() {
 	setup();
 }
 
+let colorClock = ''
+let lineWeightClock = 14
 let lines = []
 let clock;
 let widthBetweenLines;
-let all_lines = 100; // 1 minute = 60 sec
+let all_lines = 16; // 1 minute = 60 sec
 let centerX = 0;
 let centerY = 0;
+let fontSizeLine = 15;
 let unit = 1000 // 1 sec difference between lines
 const SEC = 1000
 const MIN = 60 * 1000
 const HOUR = 60 * 60 * 1000
 const DAY = 24 * 60 * 60 * 1000
+const upLimitLine = 300;
+const downLimitLine = 15;
 class Clock {
 	now = new Date(Math.floor(new Date / 1000) * 1000)
 	update() {
@@ -23,24 +28,25 @@ class Clock {
 	draw() {
 		fill('rgba(255,255,255,0)')
 
-		const roundedTo = unit === SEC ? 0.2 : unit === MIN ? 0.4 : unit === HOUR ? 0.7 : unit === DAY ? 0.9 : 0
-		for(let i = 0.2; i <= roundedTo; i += 0.2) {
-			stroke(`rgba(155,128,101,${1 - i})`)
-
-			const lineWeight = 40;
-			const arcParam = 100 + (i * lineWeight * 10)
-			strokeWeight(lineWeight)
-			arc(centerX, centerY, arcParam, arcParam, 0, TWO_PI)
-		}
+		// const roundedTo = unit === SEC ? 0.2 : unit === MIN ? 0.4 : unit === HOUR ? 0.7 : unit === DAY ? 0.9 : 0
+		// for(let i = 0.2; i <= roundedTo; i += 0.2) {
+		// 	stroke(colorClock)
+		// 	// stroke(`rgba(155,128,101,${1 - i})`)
+		//
+		// 	const lineWeight = lineWeightClock;
+		// 	const arcParam = 100 + (i * lineWeight * 10)
+		// 	// strokeWeight(lineWeight)
+		// 	// arc(centerX, centerY, arcParam, arcParam, 0, TWO_PI)
+		// }
 
 
 		noStroke()
-		textFont('Arial', 24)
+		textFont('Tahoma', 124)
 		const textString = format(this.now);
 		const tWidth = textWidth(textString);
 		const textCenter = tWidth / 2;
-
-		fill('rgba(155,128,101,0.8)');
+		fill(colorClock);
+		alpha(colorClock)
 
 		const rectParams = {
 			x: centerX - textCenter - 10,
@@ -48,10 +54,10 @@ class Clock {
 			w: tWidth + 20,
 			h: 30,
 		}
-		rect(rectParams.x, rectParams.y, rectParams.w, rectParams.h);
+		// rect(rectParams.x, rectParams.y, rectParams.w, rectParams.h);
 
-		fill('#1f1f1f');
-		text(textString, centerX - textCenter, centerY + 8);
+		fill('#d6dae0');
+		text(textString, centerX - textCenter, centerY + 40);
 
 		// strokeWeight(1)
 		// stroke(`rgba(55,128,201,1)`)
@@ -133,12 +139,12 @@ class Line {
 		let lineColor;
 
 		if(this.isPast) {
-			lineColor = '#7a795c';
+			lineColor = '#d7d7d7';
 			stroke(lineColor)
 			strokeWeight(1)
 		}
-		if(this.isFuture) {
-			lineColor = '#3780c9';
+		else if(this.isFuture) {
+			lineColor = '#de4554';
 			stroke(lineColor);
 			// stroke('black');
 			strokeWeight(2);
@@ -154,7 +160,6 @@ class Line {
 
 		fill(lineColor)
 		noStroke()
-		textFont('Arial', 6)
 		const number =
 			this.isSecond ? this.seconds :
 				this.isMinute ? this.minutes :
@@ -173,10 +178,19 @@ class Line {
 			bottomText = this.isMonth ? '1' : '0'
 		}
 
+		textFont('Arial', 15)
 		const topWidth = textWidth(topText);
-		const bottomWidth = textWidth(bottomText);
-
 		text(topText, this.x - topWidth / 2, this.yStart - 6);
+
+
+		const step = all_lines - downLimitLine
+		const maxFS = 20
+		const minFS = 4
+		const k = (maxFS - minFS) / (upLimitLine - downLimitLine) // 0.056140350877193
+		const calcFS = fontSizeLine - step * k;
+		const fs = calcFS > 0 ? calcFS : 1
+		textFont('Arial', fs)
+		const bottomWidth = textWidth(bottomText);
 		text(bottomText, this.x - bottomWidth / 2, this.yEnd + 14);
 
 	}
@@ -274,55 +288,72 @@ function init() {
 		}
 		return new Line(floor)
 	});
+	window.PARAMS.all_lines = all_lines
 }
 function draw() {
-	background(255);
+	background(245);
+	clock.update();
 
 	lines.forEach(line => {
 		line.update()
 	})
-	clock.update();
 
 }
 function mousePress(event) {
 }
+function touchMoved(event) {
+	console.log(event)
+}
 function mouseWheel(event) {
 	let delta = Math.round(event.delta);
-	const lineLimit = 400
+
 	if(delta > 0) {
-		all_lines++;
-		if(all_lines > lineLimit) {
+		// if(all_lines > 100) {
+		// 	all_lines += 2
+		// }
+		// if(all_lines > 200) {
+		// 	all_lines += 5
+		// }
+		if(all_lines > upLimitLine) {
 			if(unit === SEC) {
 				unit = MIN
-				all_lines = Math.round(lineLimit / (MIN / 1000))
+				all_lines = Math.round(upLimitLine / (MIN / 1000))
 			}
 			else if(unit === MIN) {
 				unit = HOUR
-				all_lines = Math.round(lineLimit / (HOUR / 1000))
+				all_lines = Math.round(upLimitLine / (HOUR / 1000))
 			}
 			else if(unit === HOUR) {
 				unit = DAY
-				all_lines = Math.round(lineLimit / (DAY / 1000))
-			}
-		}
-	}
-	if(delta < 0) {
-		if(all_lines <= 10) {
-			if(unit === DAY) {
-				unit = HOUR
-				all_lines = lineLimit
-			}
-			else if(unit === HOUR) {
-				unit = MIN
-				all_lines = lineLimit
-			}
-			else if(unit === MIN) {
-				unit = SEC
-				all_lines = lineLimit
+				all_lines = Math.round(upLimitLine / (DAY / 1000))
 			}
 		}
 		else {
-			all_lines--;
+			// console.log('all_lines', all_lines)
+			// console.log('all_lines / 20', all_lines / 20)
+			// console.log('Math.ceil', Math.ceil(all_lines / 20))
+			// all_lines = all_lines + Math.ceil(all_lines / 10);
+			all_lines = all_lines + 1
+		}
+	}
+	if(delta < 0) {
+		if(all_lines <= downLimitLine) {
+			if(unit === DAY) {
+				unit = HOUR
+				all_lines = upLimitLine
+			}
+			else if(unit === HOUR) {
+				unit = MIN
+				all_lines = upLimitLine
+			}
+			else if(unit === MIN) {
+				unit = SEC
+				all_lines = upLimitLine
+			}
+		}
+		else {
+			// all_lines = all_lines - Math.ceil(all_lines / 10);
+			all_lines = all_lines - 1
 		}
 	}
 	init()

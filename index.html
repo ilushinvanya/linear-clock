@@ -10,7 +10,57 @@
 
 </head>
 <body>
+
 <script src="scripts/p5.min.js"></script>
 <script src="scripts/script.js"></script>
+<script type="module">
+    import { Pane } from 'https://cdn.jsdelivr.net/npm/tweakpane@4.0.1/dist/tweakpane.min.js';
+    const pane = new Pane();
+    window.PARAMS = {
+        all_lines: all_lines,
+        fps: 0,
+        lineFontSize: fontSizeLine,
+    };
+
+    const b = pane.addBinding(
+            PARAMS, 'all_lines',
+            {min: 10, max: 1500, step: 1, readonly: true}
+    );
+    pane.addBinding(
+            PARAMS, 'fps',
+            {min: 1, max: 80, step: 1, readonly: true}
+    );
+    const lineFontSize = pane.addBinding(
+            PARAMS, 'lineFontSize',
+            {min: 1, max: 30, step: 1}
+    );
+
+
+    b.on('change', function(ev) {
+        all_lines = parseInt(ev.value);
+        init()
+    });
+    lineFontSize.on('change', (ev) => {
+        fontSizeLine = ev.value;
+    });
+    function fpsMeter(){
+        let prevTime = Date.now(),
+                frames = 0;
+
+        requestAnimationFrame(function loop() {
+            const time = Date.now();
+            frames++;
+            if (time > prevTime + 1000) {
+                let fps = Math.round( ( frames * 1000 ) / ( time - prevTime ) );
+                prevTime = time;
+                frames = 0;
+                PARAMS.fps = fps
+            }
+
+            requestAnimationFrame(loop);
+        });
+    }
+    fpsMeter();
+</script>
 </body>
 </html>
