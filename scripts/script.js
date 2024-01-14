@@ -3,8 +3,6 @@ function windowResized() {
 	setup();
 }
 
-let colorClock = ''
-let lineWeightClock = 14
 let lines = []
 let clock;
 let widthBetweenLines;
@@ -26,8 +24,6 @@ class Clock {
 		this.draw();
 	}
 	draw() {
-		fill('rgba(255,255,255,0)')
-
 		// const roundedTo = unit === SEC ? 0.2 : unit === MIN ? 0.4 : unit === HOUR ? 0.7 : unit === DAY ? 0.9 : 0
 		// for(let i = 0.2; i <= roundedTo; i += 0.2) {
 		// 	stroke(colorClock)
@@ -45,16 +41,6 @@ class Clock {
 		const textString = format(this.now);
 		const tWidth = textWidth(textString);
 		const textCenter = tWidth / 2;
-		fill(colorClock);
-		alpha(colorClock)
-
-		const rectParams = {
-			x: centerX - textCenter - 10,
-			y: centerY - 15,
-			w: tWidth + 20,
-			h: 30,
-		}
-		// rect(rectParams.x, rectParams.y, rectParams.w, rectParams.h);
 
 		fill('#d6dae0');
 		text(textString, centerX - textCenter, centerY + 40);
@@ -139,7 +125,7 @@ class Line {
 		let lineColor;
 
 		if(this.isPast) {
-			lineColor = '#d7d7d7';
+			lineColor = '#d6dae0';
 			stroke(lineColor)
 			strokeWeight(1)
 		}
