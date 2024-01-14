@@ -192,11 +192,10 @@ class Line {
 		textFont('Arial', fs)
 		const bottomWidth = textWidth(bottomText);
 		text(bottomText, this.x - bottomWidth / 2, this.yEnd + 14);
-
 	}
 }
 
-class Note {
+class Note extends Line {
 	update() {
 
 	}
@@ -204,7 +203,7 @@ class Note {
 		// if(this.second === 2) {
 		// 	c.strokeStyle = `rgba(0,0,0,${ isFuture ? opacity(this.x) : 0 })`;
 		// 	c.lineWidth = 1
-		// 	let start = { x: center + 180,   y: 420  };
+		// 	let start = { x: centerX + 180,   y: 420  };
 		// 	let cp1 =   { x: this.x,   y: 590  };
 		// 	let cp2 =   { x: this.x,   y: 390  };
 		// 	let end =   { x: this.x,   y: 340 };
@@ -237,7 +236,7 @@ class Note {
 		//
 		// 	if(isFuture) {
 		// 		const textTitle = 'Здесь ещё будущее';
-		// 		const textSubTitle = 'На него можно повлиять\nЕсли делать дела';
+		// 		const textSubTitle = 'Если делать дела, то на него можно повлиять\n';
 		//
 		// 		c.fillStyle = `rgba(0,0,0,${ opacity(this.x) })`;
 		// 		c.font = '26pt Arial';
@@ -252,7 +251,7 @@ class Note {
 		//
 		// 	if(isPast) {
 		// 		const textTitle = 'Тут уже прошлое';
-		// 		const textSubTitle = 'Его не изменить, время прошло\nостались только история, опыт и воспоминания';
+		// 		const textSubTitle = 'Его не изменить, время прошло\nостались только история, опыт и память';
 		// 		c.fillStyle = `rgba(0,0,0,${ opacity(this.x) })`;
 		//
 		// 		c.font = '26pt Arial';
@@ -288,7 +287,7 @@ function init() {
 		}
 		return new Line(floor)
 	});
-	window.PARAMS.all_lines = all_lines
+	// window.PARAMS.all_lines = all_lines
 }
 function draw() {
 	background(245);
@@ -301,19 +300,22 @@ function draw() {
 }
 function mousePress(event) {
 }
+let lastMouseY = 0
 function touchMoved(event) {
-	console.log(event)
+	if(mouseY > lastMouseY) {
+		// down
+		mouseWheel({ delta: -1 })
+	}
+	if(mouseY < lastMouseY) {
+		// up
+		mouseWheel({ delta: 1 })
+	}
+	lastMouseY = mouseY
 }
 function mouseWheel(event) {
 	let delta = Math.round(event.delta);
 
 	if(delta > 0) {
-		// if(all_lines > 100) {
-		// 	all_lines += 2
-		// }
-		// if(all_lines > 200) {
-		// 	all_lines += 5
-		// }
 		if(all_lines > upLimitLine) {
 			if(unit === SEC) {
 				unit = MIN
@@ -329,9 +331,6 @@ function mouseWheel(event) {
 			}
 		}
 		else {
-			// console.log('all_lines', all_lines)
-			// console.log('all_lines / 20', all_lines / 20)
-			// console.log('Math.ceil', Math.ceil(all_lines / 20))
 			// all_lines = all_lines + Math.ceil(all_lines / 10);
 			all_lines = all_lines + 1
 		}
