@@ -37,7 +37,7 @@ class Clock {
 
 
 		noStroke()
-		textFont('Tahoma', 124)
+		textFont('Arial', 124)
 		const textString = format(this.now);
 		const tWidth = textWidth(textString);
 		const textCenter = tWidth / 2;

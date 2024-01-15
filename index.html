@@ -19,29 +19,31 @@
     window.PARAMS = {
         all_lines: all_lines,
         fps: 0,
-        lineFontSize: fontSizeLine,
     };
 
     const b = pane.addBinding(
             PARAMS, 'all_lines',
-            {min: 10, max: 1500, step: 1, readonly: true}
+            {
+                min: 10,
+                max: 1500,
+                step: 1,
+                readonly: true
+            }
     );
     pane.addBinding(
             PARAMS, 'fps',
-            {min: 1, max: 80, step: 1, readonly: true}
-    );
-    const lineFontSize = pane.addBinding(
-            PARAMS, 'lineFontSize',
-            {min: 1, max: 30, step: 1}
+            {
+                min: 1,
+                max: 80,
+                step: 1,
+                readonly: true
+            }
     );
 
 
     b.on('change', function(ev) {
         all_lines = parseInt(ev.value);
         init()
-    });
-    lineFontSize.on('change', (ev) => {
-        fontSizeLine = ev.value;
     });
     function fpsMeter(){
         let prevTime = Date.now(),
