@@ -181,74 +181,87 @@ class Line {
 	}
 }
 
-class Note extends Line {
+class Note {
 	update() {
 
 	}
 	draw() {
-		// if(this.second === 2) {
-		// 	c.strokeStyle = `rgba(0,0,0,${ isFuture ? opacity(this.x) : 0 })`;
-		// 	c.lineWidth = 1
-		// 	let start = { x: centerX + 180,   y: 420  };
-		// 	let cp1 =   { x: this.x,   y: 590  };
-		// 	let cp2 =   { x: this.x,   y: 390  };
-		// 	let end =   { x: this.x,   y: 340 };
-		//
-		// 	c.beginPath();
-		// 	c.moveTo(start.x, start.y);
-		// 	c.bezierCurveTo(cp1.x, cp1.y, cp2.x, cp2.y, end.x, end.y);
-		// 	c.stroke();
-		// 	c.closePath();
-		//
-		// 	c.fillStyle = `rgba(0,0,0,${ isFuture ? opacity(this.x) : 0 })`;
-		// 	c.beginPath();
-		// 	c.moveTo(end.x + 6, end.y + 6);
-		// 	c.lineTo(end.x, end.y);
-		// 	c.lineTo(end.x - 6, end.y + 6);
-		// 	c.stroke();
-		// 	c.fill()
-		// 	c.closePath();
-		//
-		// 	c.font = '14pt Arial';
-		// 	c.lineWidth = 1;
-		// 	c.fillStyle = `rgba(0,0,0,${ opacity(this.x) })`;
-		// 	let text = 'Вот эта секунда больше никогда не повторится \n' +
-		// 		' Она уникальная раз в жизни \n Её координаты ' + format(this.date, 'y.MM.dd..HH.mm.ss');
-		//
-		// 	if(isPast) {
-		// 		text = 'Всё, она прошла'
-		// 	}
-		// 	printAtCenter(text, 400, 20);
-		//
-		// 	if(isFuture) {
-		// 		const textTitle = 'Здесь ещё будущее';
-		// 		const textSubTitle = 'Если делать дела, то на него можно повлиять\n';
-		//
-		// 		c.fillStyle = `rgba(0,0,0,${ opacity(this.x) })`;
-		// 		c.font = '26pt Arial';
-		// 		c.lineWidth = 2;
-		// 		printAtRight(textTitle, 70, 100, 30);
-		//
-		// 		c.fillStyle = `rgba(0,0,0,${ opacity(this.x) - 0.2 })`;
-		// 		c.font = '18pt Arial';
-		// 		c.lineWidth = 1;
-		// 		printAtRight(textSubTitle, 110, 100, 26);
-		// 	}
-		//
-		// 	if(isPast) {
-		// 		const textTitle = 'Тут уже прошлое';
-		// 		const textSubTitle = 'Его не изменить, время прошло\nостались только история, опыт и память';
-		// 		c.fillStyle = `rgba(0,0,0,${ opacity(this.x) })`;
-		//
-		// 		c.font = '26pt Arial';
-		// 		c.lineWidth = 2;
-		// 		printAtLeft(textTitle, 70, 100, 30);
-		//
-		// 		c.font = '18pt Arial';
-		// 		c.lineWidth = 1;
-		// 		printAtLeft(textSubTitle, 110, 100, 26);
-		// 	}
-		// }
+		const that = lines[14]
+
+		if(that.second === 2) {
+			const lineColor = `rgba(0,0,0,${ that.isFuture ? opacity(that.x) : 0 })`;
+			stroke(lineColor)
+			strokeWeight(1)
+			let start= { x: centerX + 180,   y: 420  };
+			let cp1 = { x: that.x,   y: 590  };
+			let cp2 = { x: that.x,   y: 390  };
+			let end = { x: that.x,   y: 340 };
+
+			// down older
+			// c.beginPath();
+			// c.moveTo(start.x, start.y);
+			// c.bezierCurveTo(cp1.x, cp1.y, cp2.x, cp2.y, end.x, end.y);
+			noFill();
+			stroke(255, 102, 0);
+			line(85, 20, 10, 10);
+			line(90, 90, 15, 80);
+			stroke(0, 0, 0);
+			bezier(85, 20, 10, 10, 90, 90, 15, 80);
+
+			// bezier(x1, y1, x2, y2, x3, y3, x4, y4)
+			// c.stroke();
+			// c.closePath();
+			//
+			// c.fillStyle = `rgba(0,0,0,${ that.isFuture ? opacity(that.x) : 0 })`;
+			// c.beginPath();
+			// c.moveTo(end.x + 6, end.y + 6);
+			// c.lineTo(end.x, end.y);
+			// c.lineTo(end.x - 6, end.y + 6);
+			// c.stroke();
+			// c.fill()
+			// c.closePath();
+			// up older
+
+			textFont('Arial', 14)
+			strokeWeight(1)
+			fill(`rgba(0,0,0,${ opacity(that.x) })`)
+			let text = 'Вот эта секунда больше никогда не повторится \n' +
+				' Она уникальная раз в жизни \n Её координаты ' + format(that.date, 'y.MM.dd..HH.mm.ss');
+
+			if(that.isPast) {
+				text = 'Всё, она прошла'
+			}
+			printAtCenter(text, 400, 20);
+
+			if(that.isFuture) {
+				const textTitle = 'Здесь ещё будущее';
+				const textSubTitle = 'Если делать дела, то на него можно повлиять\n';
+
+				fill(`rgba(0,0,0,${ opacity(that.x) })`);
+				textFont('Arial', 26)
+				strokeWeight(2)
+				printAtRight(textTitle, 70, 100, 30);
+
+				fill(`rgba(0,0,0,${ opacity(that.x) - 0.2 })`);
+				textFont('Arial', 18);
+				strokeWeight(1)
+				printAtRight(textSubTitle, 110, 100, 26);
+			}
+
+			if(that.isPast) {
+				const textTitle = 'Тут уже прошлое';
+				const textSubTitle = 'Его не изменить, время прошло\nостались только история, опыт и память';
+				fill(`rgba(0,0,0,${ opacity(that.x) })`);
+
+				textFont('Arial', 26);
+				strokeWeight(2)
+				printAtLeft(textTitle, 70, 100, 30);
+
+				textFont('Arial', 18);
+				strokeWeight(1)
+				printAtLeft(textSubTitle, 110, 100, 26);
+			}
+		}
 	}
 }
 
@@ -261,6 +274,8 @@ function setup() {
 	clock = new Clock();
 	init()
 }
+
+// let note
 function init() {
 	widthBetweenLines = width / all_lines;
 
@@ -273,7 +288,8 @@ function init() {
 		}
 		return new Line(floor)
 	});
-	// window.PARAMS.all_lines = all_lines
+	// note = new Note()
+	window.PARAMS.all_lines = all_lines
 }
 function draw() {
 	background(245);
@@ -282,6 +298,7 @@ function draw() {
 	lines.forEach(line => {
 		line.update()
 	})
+	// note.update()
 
 }
 function mousePress(event) {
@@ -290,14 +307,15 @@ let lastMouseY = 0
 function touchMoved(event) {
 	if(mouseY > lastMouseY) {
 		// down
-		mouseWheel({ delta: -1 })
+		mouseWheel({ delta: -10 })
 	}
 	if(mouseY < lastMouseY) {
 		// up
-		mouseWheel({ delta: 1 })
+		mouseWheel({ delta: 10 })
 	}
 	lastMouseY = mouseY
 }
+
 function mouseWheel(event) {
 	let delta = Math.round(event.delta);
 
@@ -344,11 +362,6 @@ function mouseWheel(event) {
 	init()
 }
 
-
-
-
-
-
 function format(date) {
 	// 'HH:mm:ss'
 	const seconds = date.getSeconds();
@@ -375,27 +388,27 @@ const opacity = (currentX) => {
 
 	return 1;
 }
-const printAtCenter = (text, y, lineHeight) => {
-	const lines = text.split('\n');
+const printAtCenter = (str, y, lineHeight) => {
+	const lines = str.split('\n');
 	// const lineHeight = 15;
 
 	for (let i = 0; i < lines.length; i++) {
 		const textWidth = c.measureText(lines[i]).width;
 		const x = centerX - (textWidth / 2);
-		c.fillText(lines[i], x, y + (i*lineHeight) );
+		text(lines[i], x, y + (i*lineHeight) );
 	}
 }
-const printAtLeft = (text, y, offset, lineHeight) => {
-	const lines = text.split('\n');
+const printAtLeft = (str, y, offset, lineHeight) => {
+	const lines = str.split('\n');
 	// const lineHeight = 16;
 
 	for (let i = 0; i < lines.length; i++) {
 		// const lineHeight = c.measureText(lines[i]).actualBoundingBoxDescent;
-		c.fillText(lines[i], offset, y + (i * lineHeight));
+		text(lines[i], offset, y + (i * lineHeight));
 	}
 }
-const printAtRight = (text, y, offset, lineHeight) => {
-	const lines = text.split('\n');
+const printAtRight = (str, y, offset, lineHeight) => {
+	const lines = str.split('\n');
 	// const lineHeight = 16;
 
 	for (let i = 0; i < lines.length; i++) {
