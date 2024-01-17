@@ -5,6 +5,7 @@ function windowResized() {
 
 let lines = []
 let clock;
+let note;
 let widthBetweenLines;
 let all_lines = 16; // 1 minute = 60 sec
 let centerX = 0;
@@ -182,48 +183,47 @@ class Line {
 }
 
 class Note {
+	constructor(date) {
+		this.date = date;
+		this.hasLine = this.getLine();
+	}
+	getLine() {
+		return lines.find(line => line.date === this.date)
+	}
 	update() {
-
+		this.hasLine = this.getLine();
+		this.draw()
 	}
 	draw() {
-		const that = lines[14]
-
-		if(that.second === 2) {
+		const that = this.hasLine
+		if(that) {
 			const lineColor = `rgba(0,0,0,${ that.isFuture ? opacity(that.x) : 0 })`;
 			stroke(lineColor)
 			strokeWeight(1)
-			let start= { x: centerX + 180,   y: 420  };
+			let start= {
+				x: centerX + 180,
+				y: 420
+			};
 			let cp1 = { x: that.x,   y: 590  };
 			let cp2 = { x: that.x,   y: 390  };
 			let end = { x: that.x,   y: 340 };
 
 			// down older
-			// c.beginPath();
-			// c.moveTo(start.x, start.y);
-			// c.bezierCurveTo(cp1.x, cp1.y, cp2.x, cp2.y, end.x, end.y);
 			noFill();
-			stroke(255, 102, 0);
-			line(85, 20, 10, 10);
-			line(90, 90, 15, 80);
-			stroke(0, 0, 0);
-			bezier(85, 20, 10, 10, 90, 90, 15, 80);
+			// stroke(255, 102, 0);
+			// line(85, 20, 10, 10);
+			// line(90, 90, 15, 80);
+			// stroke(0, 0, 0);
+			// bezier(85, 20, 10, 10, 90, 90, 15, 80);
 
-			// bezier(x1, y1, x2, y2, x3, y3, x4, y4)
-			// c.stroke();
-			// c.closePath();
-			//
-			// c.fillStyle = `rgba(0,0,0,${ that.isFuture ? opacity(that.x) : 0 })`;
-			// c.beginPath();
-			// c.moveTo(end.x + 6, end.y + 6);
-			// c.lineTo(end.x, end.y);
-			// c.lineTo(end.x - 6, end.y + 6);
-			// c.stroke();
-			// c.fill()
-			// c.closePath();
+			bezier(start.x, start.y, cp1.x, cp1.y, cp2.x, cp2.y, end.x, end.y)
+			fill(`rgba(0,0,0,${ that.isFuture ? opacity(that.x) : 0 })`);
+			line(end.x + 6, end.y + 6, end.x, end.y);
+			line(end.x - 6, end.y + 6, end.x, end.y);
 			// up older
 
 			textFont('Arial', 14)
-			strokeWeight(1)
+			strokeWeight(0)
 			fill(`rgba(0,0,0,${ opacity(that.x) })`)
 			let text = 'Вот эта секунда больше никогда не повторится \n' +
 				' Она уникальная раз в жизни \n Её координаты ' + format(that.date, 'y.MM.dd..HH.mm.ss');
@@ -237,14 +237,15 @@ class Note {
 				const textTitle = 'Здесь ещё будущее';
 				const textSubTitle = 'Если делать дела, то на него можно повлиять\n';
 
+				// fill(`rgb(0, 0, 0)`);
 				fill(`rgba(0,0,0,${ opacity(that.x) })`);
 				textFont('Arial', 26)
-				strokeWeight(2)
+				strokeWeight(0)
 				printAtRight(textTitle, 70, 100, 30);
 
-				fill(`rgba(0,0,0,${ opacity(that.x) - 0.2 })`);
+				fill(`rgba(0,0,0,${ opacity(that.x) })`);
 				textFont('Arial', 18);
-				strokeWeight(1)
+				strokeWeight(0)
 				printAtRight(textSubTitle, 110, 100, 26);
 			}
 
@@ -254,17 +255,16 @@ class Note {
 				fill(`rgba(0,0,0,${ opacity(that.x) })`);
 
 				textFont('Arial', 26);
-				strokeWeight(2)
+				strokeWeight(0)
 				printAtLeft(textTitle, 70, 100, 30);
 
 				textFont('Arial', 18);
-				strokeWeight(1)
+				strokeWeight(0)
 				printAtLeft(textSubTitle, 110, 100, 26);
 			}
 		}
 	}
 }
-
 
 function setup() {
 	const c = createCanvas(windowWidth, windowHeight);
@@ -273,9 +273,10 @@ function setup() {
 	centerY = height / 2;
 	clock = new Clock();
 	init()
+	note = new Note(Math.floor(Date.now() / unit) * unit + 10000)
 }
 
-// let note
+
 function init() {
 	widthBetweenLines = width / all_lines;
 
@@ -288,7 +289,6 @@ function init() {
 		}
 		return new Line(floor)
 	});
-	// note = new Note()
 	window.PARAMS.all_lines = all_lines
 }
 function draw() {
@@ -298,13 +298,16 @@ function draw() {
 	lines.forEach(line => {
 		line.update()
 	})
-	// note.update()
-
+	note.update()
+	// strokeWeight(1)
+	// stroke('black')
+	// line(0, centerY, width, centerY)
+	// line(centerX, 0, centerX, height)
 }
 function mousePress(event) {
 }
 let lastMouseY = 0
-function touchMoved(event) {
+function touchMoved() {
 	if(mouseY > lastMouseY) {
 		// down
 		mouseWheel({ delta: -10 })
@@ -364,9 +367,10 @@ function mouseWheel(event) {
 
 function format(date) {
 	// 'HH:mm:ss'
-	const seconds = date.getSeconds();
-	const minutes = date.getMinutes();
-	const hours = date.getHours();
+
+	const seconds = new Date(date).getSeconds();
+	const minutes = new Date(date).getMinutes();
+	const hours = new Date(date).getHours();
 	if(unit === SEC) {
 		return `${hours >= 10 ? hours : '0' + hours}:${minutes >= 10 ? minutes : '0' + minutes}:${seconds >= 10 ? seconds : '0' + seconds}`;
 	}
@@ -393,8 +397,8 @@ const printAtCenter = (str, y, lineHeight) => {
 	// const lineHeight = 15;
 
 	for (let i = 0; i < lines.length; i++) {
-		const textWidth = c.measureText(lines[i]).width;
-		const x = centerX - (textWidth / 2);
+		const txtWidth = textWidth(lines[i]);
+		const x = centerX - (txtWidth / 2);
 		text(lines[i], x, y + (i*lineHeight) );
 	}
 }
