@@ -2,10 +2,13 @@ function windowResized() {
 	resizeCanvas(windowWidth, windowHeight);
 	setup();
 }
-
+const ClockColor = '#d6dae0'
+const PastLineColor = '#d6dae0';
+const FutureLineColor = '#de4554';
 let lines = []
 let clock;
-let note;
+let note1;
+let note2;
 let widthBetweenLines;
 let all_lines = 16; // 1 minute = 60 sec
 let centerX = 0;
@@ -25,32 +28,14 @@ class Clock {
 		this.draw();
 	}
 	draw() {
-		// const roundedTo = unit === SEC ? 0.2 : unit === MIN ? 0.4 : unit === HOUR ? 0.7 : unit === DAY ? 0.9 : 0
-		// for(let i = 0.2; i <= roundedTo; i += 0.2) {
-		// 	stroke(colorClock)
-		// 	// stroke(`rgba(155,128,101,${1 - i})`)
-		//
-		// 	const lineWeight = lineWeightClock;
-		// 	const arcParam = 100 + (i * lineWeight * 10)
-		// 	// strokeWeight(lineWeight)
-		// 	// arc(centerX, centerY, arcParam, arcParam, 0, TWO_PI)
-		// }
-
-
 		noStroke()
 		textFont('Arial', 124)
 		const textString = format(this.now);
 		const tWidth = textWidth(textString);
 		const textCenter = tWidth / 2;
 
-		fill('#d6dae0');
+		fill(ClockColor);
 		text(textString, centerX - textCenter, centerY + 40);
-
-		// strokeWeight(1)
-		// stroke(`rgba(55,128,201,1)`)
-		// line(centerX, 0, centerX, height)
-		// line(0, centerY, width, centerY)
-
 	}
 }
 
@@ -123,21 +108,21 @@ class Line {
 		this.draw()
 	}
 	draw() {
-		let lineColor;
+		// let lineColor;
 
 		if(this.isPast) {
-			lineColor = '#d6dae0';
-			stroke(lineColor)
+			stroke(PastLineColor)
 			strokeWeight(1)
+			fill(PastLineColor)
 		}
 		else if(this.isFuture) {
-			lineColor = '#de4554';
-			stroke(lineColor);
+			stroke(FutureLineColor);
 			// stroke('black');
 			strokeWeight(2);
+			fill(FutureLineColor)
 		}
 
-		fill('rgba(0,0,0,0)')
+		// fill('rgba(0,0,0,0)')
 		// if(centerX - widthBetweenLines / 2 < this.x && this.x < centerX) {
 		// 	bezier(this.x, this.yStart, centerX, centerY, centerX, centerY, this.x, this.yEnd);
 		// }
@@ -145,7 +130,7 @@ class Line {
 			line(this.x, this.yStart, this.x, this.yEnd)
 		// }
 
-		fill(lineColor)
+
 		noStroke()
 		const number =
 			this.isSecond ? this.seconds :
@@ -194,15 +179,18 @@ class Note {
 		this.hasLine = this.getLine();
 		this.draw()
 	}
-	draw() {
+	draw() {}
+}
+class Note2 extends Note {
+	draw(){
 		const that = this.hasLine
 		if(that) {
 			const lineColor = `rgba(0,0,0,${ that.isFuture ? opacity(that.x) : 0 })`;
 			stroke(lineColor)
 			strokeWeight(1)
 			let start= {
-				x: centerX + 180,
-				y: 420
+				x: centerX,
+				y: centerY
 			};
 			let cp1 = { x: that.x,   y: 590  };
 			let cp2 = { x: that.x,   y: 390  };
@@ -210,12 +198,6 @@ class Note {
 
 			// down older
 			noFill();
-			// stroke(255, 102, 0);
-			// line(85, 20, 10, 10);
-			// line(90, 90, 15, 80);
-			// stroke(0, 0, 0);
-			// bezier(85, 20, 10, 10, 90, 90, 15, 80);
-
 			bezier(start.x, start.y, cp1.x, cp1.y, cp2.x, cp2.y, end.x, end.y)
 			fill(`rgba(0,0,0,${ that.isFuture ? opacity(that.x) : 0 })`);
 			line(end.x + 6, end.y + 6, end.x, end.y);
@@ -225,43 +207,66 @@ class Note {
 			textFont('Arial', 14)
 			strokeWeight(0)
 			fill(`rgba(0,0,0,${ opacity(that.x) })`)
-			let text = 'Вот эта секунда больше никогда не повторится \n' +
+			let str = 'Вот эта секунда больше никогда не повторится \n' +
 				' Она уникальная раз в жизни \n Её координаты ' + format(that.date, 'y.MM.dd..HH.mm.ss');
 
 			if(that.isPast) {
-				text = 'Всё, она прошла'
+				str = 'Всё, она прошла'
 			}
-			printAtCenter(text, 400, 20);
+			printAtCenter(str, 400, 20);
 
-			if(that.isFuture) {
-				const textTitle = 'Здесь ещё будущее';
-				const textSubTitle = 'Если делать дела, то на него можно повлиять\n';
-
-				// fill(`rgb(0, 0, 0)`);
-				fill(`rgba(0,0,0,${ opacity(that.x) })`);
-				textFont('Arial', 26)
-				strokeWeight(0)
-				printAtRight(textTitle, 70, 100, 30);
-
-				fill(`rgba(0,0,0,${ opacity(that.x) })`);
-				textFont('Arial', 18);
-				strokeWeight(0)
-				printAtRight(textSubTitle, 110, 100, 26);
-			}
-
+		}
+	}
+}
+class Note1 extends Note {
+	draw(){
+		const that = this.hasLine
+		if(that) {
 			if(that.isPast) {
-				const textTitle = 'Тут уже прошлое';
-				const textSubTitle = 'Его не изменить, время прошло\nостались только история, опыт и память';
-				fill(`rgba(0,0,0,${ opacity(that.x) })`);
+				const pastTextTitle = 'Уже прошлое';
+				const pastTextSubTitle = 'Его не изменить, время прошло\nОстались только память, опыт и история';
+				// lineColor = '#d6dae0';
+				fill(`rgba(200,200,200,${ opacity(that.x) })`);
 
 				textFont('Arial', 26);
 				strokeWeight(0)
-				printAtLeft(textTitle, 70, 100, 30);
+				text(pastTextTitle, that.x, centerY + 70);
 
 				textFont('Arial', 18);
 				strokeWeight(0)
-				printAtLeft(textSubTitle, 110, 100, 26);
+				text(pastTextSubTitle, that.x, centerY + 96);
 			}
+
+			const futureTextTitle = 'Ещё будущее';
+			const futureTextSubTitle = 'Если делать дела, то на него можно повлиять';
+			// lineColor = '#de4554';
+			fill(`rgba(222,69,84,${ opacity(that.x) })`);
+			textFont('Arial', 26)
+			strokeWeight(0)
+
+			if(that.isPast) {
+				fill(245)
+				rect(centerX, centerY + 50, textWidth(futureTextTitle), 40)
+
+				fill(`rgba(222,69,84,${ opacity(that.x) })`);
+
+				text(futureTextTitle, centerX, centerY + 70);
+
+				textFont('Arial', 18);
+				fill(245)
+				rect(centerX, centerY + 80, textWidth(futureTextSubTitle), 40)
+
+				fill(`rgba(222,69,84,${ opacity(that.x) })`);
+				text(futureTextSubTitle, centerX, centerY + 96);
+			}
+			if(that.isFuture) {
+
+				text(futureTextTitle, that.x, centerY + 70);
+
+				textFont('Arial', 18);
+				text(futureTextSubTitle, that.x, centerY + 96);
+			}
+
 		}
 	}
 }
@@ -273,7 +278,8 @@ function setup() {
 	centerY = height / 2;
 	clock = new Clock();
 	init()
-	note = new Note(Math.floor(Date.now() / unit) * unit + 10000)
+	note1 = new Note1(Math.floor(Date.now() / unit) * unit + 30000)
+	note2 = new Note2(Math.floor(Date.now() / unit) * unit + 10000)
 }
 
 
@@ -298,7 +304,8 @@ function draw() {
 	lines.forEach(line => {
 		line.update()
 	})
-	note.update()
+	note1.update()
+	note2.update()
 	// strokeWeight(1)
 	// stroke('black')
 	// line(0, centerY, width, centerY)
@@ -371,12 +378,14 @@ function format(date) {
 	const seconds = new Date(date).getSeconds();
 	const minutes = new Date(date).getMinutes();
 	const hours = new Date(date).getHours();
+	const hourText = hours >= 10 ? hours : '0' + hours;
+	const minuteText = minutes >= 10 ? minutes : '0' + minutes;
+	let clockText = `${hourText}:${minuteText}`
 	if(unit === SEC) {
-		return `${hours >= 10 ? hours : '0' + hours}:${minutes >= 10 ? minutes : '0' + minutes}:${seconds >= 10 ? seconds : '0' + seconds}`;
+		const secondText = seconds >= 10 ? seconds : '0' + seconds;
+		return `${clockText}:${secondText}`;
 	}
-	else {
-		return `${hours >= 10 ? hours : '0' + hours}:${minutes >= 10 ? minutes : '0' + minutes}`;
-	}
+	return clockText;
 }
 const opacity = (currentX) => {
 	const rightDiff = width - currentX;
@@ -385,7 +394,6 @@ const opacity = (currentX) => {
 	}
 
 	const leftDiff = currentX;
-	// const leftDiff = (0 - currentX)*-1;
 	if(leftDiff < 100) {
 		return leftDiff / 100;
 	}
