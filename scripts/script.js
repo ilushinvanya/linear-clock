@@ -192,9 +192,9 @@ class Note2 extends Note {
 				x: centerX,
 				y: centerY
 			};
-			let cp1 = { x: that.x,   y: 590  };
-			let cp2 = { x: that.x,   y: 390  };
-			let end = { x: that.x,   y: 340 };
+			let cp1 = { x: that.x,   y: centerY + 20  };
+			let cp2 = { x: that.x,   y: centerY + 90  };
+			let end = { x: that.x,   y: centerY + 10};
 
 			// down older
 			noFill();
@@ -213,7 +213,8 @@ class Note2 extends Note {
 			if(that.isPast) {
 				str = 'Всё, она прошла'
 			}
-			printAtCenter(str, 400, 20);
+			// text(str, centerX, centerY + 70);
+			printAtCenter(str, centerY + 70, 20);
 
 		}
 	}
@@ -223,7 +224,7 @@ class Note1 extends Note {
 		const that = this.hasLine
 		if(that) {
 			if(that.isPast) {
-				const pastTextTitle = 'Уже прошлое';
+				const pastTextTitle = 'Тут уже прошлое';
 				const pastTextSubTitle = 'Его не изменить, время прошло\nОстались только память, опыт и история';
 				// lineColor = '#d6dae0';
 				fill(`rgba(200,200,200,${ opacity(that.x) })`);
@@ -237,7 +238,7 @@ class Note1 extends Note {
 				text(pastTextSubTitle, that.x, centerY + 96);
 			}
 
-			const futureTextTitle = 'Ещё будущее';
+			const futureTextTitle = 'Здесь ещё будущее';
 			const futureTextSubTitle = 'Если делать дела, то на него можно повлиять';
 			// lineColor = '#de4554';
 			fill(`rgba(222,69,84,${ opacity(that.x) })`);
@@ -270,7 +271,18 @@ class Note1 extends Note {
 		}
 	}
 }
-
+let prevTime = Date.now(),
+	frames = 0;
+function fpsMeterloop() {
+	const time = Date.now();
+	frames++;
+	if (time > prevTime + 1000) {
+		let fps = Math.round((frames * 1000) / (time - prevTime));
+		prevTime = time;
+		frames = 0;
+		PARAMS.fps = fps
+	}
+}
 function setup() {
 	const c = createCanvas(windowWidth, windowHeight);
 	c.mouseClicked(mousePress);
@@ -279,7 +291,7 @@ function setup() {
 	clock = new Clock();
 	init()
 	note1 = new Note1(Math.floor(Date.now() / unit) * unit + 30000)
-	note2 = new Note2(Math.floor(Date.now() / unit) * unit + 10000)
+	// note2 = new Note2(Math.floor(Date.now() / unit) * unit + 10000)
 }
 
 
@@ -305,11 +317,12 @@ function draw() {
 		line.update()
 	})
 	note1.update()
-	note2.update()
+	// note2.update()
 	// strokeWeight(1)
 	// stroke('black')
 	// line(0, centerY, width, centerY)
 	// line(centerX, 0, centerX, height)
+	fpsMeterloop();
 }
 function mousePress(event) {
 }
