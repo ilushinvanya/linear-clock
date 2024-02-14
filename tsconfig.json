@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "outDir": "./dist/",
+    "strict": true,
+    "module": "es2015",
+    "target": "es2015",
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "node",
+  },
+  "include": [
+    "src/**/*",
+    "../../DefinitelyTyped/types/p5/global.d.ts"
+  ]
+}

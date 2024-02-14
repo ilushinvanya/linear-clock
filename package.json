@@ -1,0 +1,28 @@
+{
+  "name": "time-is-linear",
+  "version": "1.0.0",
+  "description": "Время линейно, а не циклично, один и тот же час не повторяется каждый день, как может показаться на стрелочном циферблате.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ilushinvanya/linear-clock.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ilushinvanya/linear-clock/issues"
+  },
+  "homepage": "https://github.com/ilushinvanya/linear-clock#readme",
+  "dependencies": {
+    "p5": "^1.9.0",
+    "vite": "^5.1.1"
+  },
+  "devDependencies": {
+    "@types/p5": "^1.7.6"
+  }
+}

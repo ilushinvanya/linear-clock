@@ -1,0 +1,9 @@
+export const ClockColor = '#d6dae0'
+export const FutureLineColor = '#de4554';
+export const PastLineColor = '#d6dae0';
+export const SEC = 1000
+export const MIN = 60 * 1000
+export const HOUR = 60 * 60 * 1000
+export const DAY = 24 * 60 * 60 * 1000
+export const upLimitLine = 300;
+export const downLimitLine = 15;
