@@ -4,4 +4,5 @@ export default defineConfig({
     server: {
         port: 3005,
     },
+    base: '/linear-clock/'
 });
