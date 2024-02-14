@@ -110,11 +110,11 @@ const s = ( sketch ) => {
 	sketch.touchMoved = () => {
 		if(sketch.mouseY > lastMouseY) {
 			// down
-			mouseWheel({ delta: -10 })
+			sketch.mouseWheel({ delta: -10 })
 		}
 		if(sketch.mouseY < lastMouseY) {
 			// up
-			mouseWheel({ delta: 10 })
+			sketch.mouseWheel({ delta: 10 })
 		}
 		lastMouseY = sketch.mouseY
 	};
