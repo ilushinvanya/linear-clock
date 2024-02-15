@@ -1,34 +1,18 @@
 import p5 from 'p5';
 import { Clock } from './classes/Clock';
 import { Line } from './classes/Line';
-import { Note1 } from './classes/Notes';
+import { Note1, Note2 } from './classes/Notes';
 import {
 	centerX,
 	centerY,
-	clock, gray, lines, linesCount, unit, note1,
+	clock, gray, lines, linesCount, unit, note1, note2,
 	setCenterX, setCenterY,
-	setClock, setLines, setWidthBetweenLines, setUnit, setLinesCount, setNote1
+	setClock, setLines, setWidthBetweenLines, setUnit, setLinesCount, setNote1, setNote2
 } from './variables';
 import { DAY, SEC, MIN, HOUR, upLimitLine, downLimitLine } from './constans';
 import { themeToggle } from './utils';
-// const messages = []
-// class Message extends Note {
-// 	constructor(date, msg) {
-// 		super(date);
-// 		this.msg = msg;
-// 	}
-// 	super;
-// 	draw() {
-// 		const that = this.hasLine
-// 		if(that) {
-// 			window.p5.textFont('Arial', 16);
-// 			window.p5.strokeWeight(1)
-// 			window.p5.fill('black')
-// 			window.p5.text(this.msg, that.x, centerY + 70);
-// 		}
-//
-// 	}
-// }
+
+
 let lastMouseY = 0
 const s = ( sketch ) => {
 	sketch.setup = () => {
@@ -39,9 +23,10 @@ const s = ( sketch ) => {
 		setClock(new Clock(sketch));
 		init()
 
-		const note1 = new Note1(Math.floor(Date.now() / unit) * unit + 10000, sketch)
+		const note1 = new Note1(Math.floor(Date.now() / unit) * unit + 20000, sketch)
 		setNote1(note1);
-		// note2 = new Note2(Math.floor(Date.now() / unit) * unit + 10000)
+		const note2 = new Note2(Math.floor(Date.now() / unit) * unit + 70000, sketch)
+		setNote2(note2);
 	};
 	sketch.draw = () => {
 		sketch.background(gray);
@@ -51,11 +36,11 @@ const s = ( sketch ) => {
 			line.update()
 		})
 		note1.update()
-		// note2.update()
-		// sketch.strokeWeight(1)
-		// sketch.stroke('black')
+		note2.update()
+		sketch.strokeWeight(1)
+		sketch.stroke('black')
 		// sketch.line(0, centerY, sketch.width, centerY)
-		// sketch.line(centerX, 0, centerX, sketch.height)
+		sketch.line(centerX, 0, centerX, sketch.height)
 		// fpsMeterLoop();
 	};
 	sketch.windowResized = () => {

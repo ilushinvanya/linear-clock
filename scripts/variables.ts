@@ -1,7 +1,8 @@
 export let note1;
 export const setNote1 = (val: any) => { note1 = val };
 
-// let note2;
+export let note2;
+export const setNote2 = (val: any) => { note2 = val };
 
 
 export let lines: any[] = []

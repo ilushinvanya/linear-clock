@@ -1,6 +1,6 @@
 import type { p5InstanceExtensions } from 'p5';
 import { centerX, centerY, lines, gray } from '../variables';
-import { generateColorWOpacity } from '../utils';
+import { generateColorWOpacity, printAtCenter, format } from '../utils';
 class Note {
     private readonly date: number;
     readonly c: p5InstanceExtensions;
@@ -23,7 +23,7 @@ export class Note2 extends Note {
     draw(){
         const that = this.hasLine
         if(that) {
-            const lineColor = `rgba(0,0,0,${ that.isFuture ? opacity(that.x) : 0 })`;
+            const lineColor = generateColorWOpacity(0,0,0, that.isFuture ? that.x : 0);
             this.c.stroke(lineColor)
             this.c.strokeWeight(1)
             let start= {
@@ -37,22 +37,22 @@ export class Note2 extends Note {
             // down older
             this.c.noFill();
             this.c.bezier(start.x, start.y, cp1.x, cp1.y, cp2.x, cp2.y, end.x, end.y)
-            this.c.fill(`rgba(0,0,0,${ that.isFuture ? opacity(that.x) : 0 })`);
+            this.c.fill(lineColor);
             this.c.line(end.x + 6, end.y + 6, end.x, end.y);
             this.c.line(end.x - 6, end.y + 6, end.x, end.y);
             // up older
 
             this.c.textFont('Arial', 14)
             this.c.strokeWeight(0)
-            this.c.fill(`rgba(0,0,0,${ opacity(that.x) })`)
+            this.c.fill(generateColorWOpacity(0,0,0, that.x));
             let str = 'Вот эта секунда больше никогда не повторится \n' +
-                ' Она уникальная раз в жизни \n Её координаты ' + format(that.date, 'y.MM.dd..HH.mm.ss');
+                ' Она уникальная раз в жизни \n Её координаты ' + format(that.date);
 
             if(that.isPast) {
                 str = 'Всё, она прошла'
             }
             // text(str, centerX, centerY + 70);
-            printAtCenter(str, centerY + 70, 20);
+            printAtCenter(str, centerY + 70, 20, this.c);
 
         }
     }
@@ -61,8 +61,8 @@ export class Note1 extends Note {
     draw(){
         const that = this.hasLine
         if(that) {
-            const offsetTitle = 70
-            const offsetSubTitle = 96
+            const offsetTitle = 90
+            const offsetSubTitle = 116
             if(that.isPast) {
                 const pastTextTitle = 'Тут уже прошлое';
                 const pastTextSubTitle = 'Его не изменить, время прошло\nОстались только память, опыт и история';

@@ -1,8 +1,10 @@
+import type { p5InstanceExtensions } from 'p5';
 import { centerX, gray, setGray, unit } from './variables';
 import { SEC } from './constans';
 
 export function format(date: number) {
     // 'HH:mm:ss'
+    // 'y.MM.dd.HH.mm.ss'
     const seconds = new Date(date).getSeconds();
     const minutes = new Date(date).getMinutes();
     const hours = new Date(date).getHours();
@@ -29,14 +31,14 @@ export const opacity = (currentX: number) => {
 export const generateColorWOpacity = (r:number,g:number,b:number, x:number) => {
     return `rgba(${r},${g},${b},${ opacity(x) })`;
 }
-export const printAtCenter = (str: string, y: number, lineHeight: number) => {
+export const printAtCenter = (str: string, y: number, lineHeight: number, c: p5InstanceExtensions) => {
     const lines = str.split('\n');
     // const lineHeight = 15;
 
     for (let i = 0; i < lines.length; i++) {
-        const txtWidth = textWidth(lines[i]);
+        const txtWidth = c.textWidth(lines[i]);
         const x = centerX - (txtWidth / 2);
-        text(lines[i], x, y + (i*lineHeight) );
+        c.text(lines[i], x, y + (i*lineHeight) );
     }
 }
 // const printAtLeft = (str, y, offset, lineHeight) => {
