@@ -61,8 +61,8 @@ export class Note1 extends Note {
     draw(){
         const that = this.hasLine
         if(that) {
-            const offsetTitle = 90
-            const offsetSubTitle = 116
+            const offsetTitle = centerY / 2
+            const offsetSubTitle = (centerY / 2) + 26
             if(that.isPast) {
                 const pastTextTitle = 'Тут уже прошлое';
                 const pastTextSubTitle = 'Его не изменить, время прошло\nОстались только память, опыт и история';
@@ -88,26 +88,27 @@ export class Note1 extends Note {
             this.c.strokeWeight(0)
 
             // Подстилка под будущее цвета фона
-            const shadowBox = () => {
+            const shadowBox = (width: number) => {
                 this.c.fill(gray)
                 this.c.stroke(0)
-                this.c.strokeWeight(1)
-                this.c.rect(centerX, centerY + offsetTitle, this.c.textWidth(futureTextTitle), 54)
+                this.c.strokeWeight(0)
+                const y = centerY + offsetTitle;
+                // const width = this.c.textWidth(futureTextTitle);
+                const height = 88;
+                this.c.rect(centerX, y - 30, width + 100, height)
             }
             if(that.isPast) {
                 // Подстилка под будущее цвета фона
-                shadowBox()
+                const width = this.c.textWidth(futureTextTitle);
+                shadowBox(width)
 
                 // Текст Будущего
                 this.c.fill(red);
-                // fill(redAlpha);
                 this.c.text(futureTextTitle, centerX, centerY + offsetTitle);
 
                 // Подтекст Будущего
                 this.c.textFont('Arial', 18);
-                shadowBox()
                 this.c.fill(red);
-                // fill(redAlpha);
                 this.c.text(futureTextSubTitle, centerX, centerY + offsetSubTitle);
             }
             if(that.isFuture) {

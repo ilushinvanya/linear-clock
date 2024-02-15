@@ -23,7 +23,7 @@ const s = ( sketch ) => {
 		setClock(new Clock(sketch));
 		init()
 
-		const note1 = new Note1(Math.floor(Date.now() / unit) * unit + 20000, sketch)
+		const note1 = new Note1(Math.floor(Date.now() / unit) * unit + 1000, sketch)
 		setNote1(note1);
 		const note2 = new Note2(Math.floor(Date.now() / unit) * unit + 70000, sketch)
 		setNote2(note2);
