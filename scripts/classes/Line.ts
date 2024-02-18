@@ -100,11 +100,11 @@ export class Line {
             sticks.push(new Line(last_elem.date + unit, this.c));
             setLines(sticks)
         }
-        const halfLine = widthBetweenLines / 2;
-        this.isHover = this.x + halfLine > this.c.mouseX && this.c.mouseX > this.x - halfLine;
-        if(this.c.mouseIsPressed && this.isHover) {
-            console.log('mouseIsPressed && isHover');
-            this.message = '111';
+        // const halfLine = widthBetweenLines / 2;
+        // this.isHover = this.x + halfLine > this.c.mouseX && this.c.mouseX > this.x - halfLine;
+        // if(this.c.mouseIsPressed && this.isHover) {
+        //     console.log('mouseIsPressed && isHover');
+        //     this.message = '111';
             // const selectedLine = lines.find(line => line.isHover);
             // 	const selectedDate = selectedLine?.date;
             // 	const selectedMsg = messages.find(msg => msg.date === selectedDate);
@@ -116,7 +116,7 @@ export class Line {
             // 		const msgText = prompt('Напишите что-нибудь');
             // 		messages.push(new Message(selectedDate, msgText))
             // 	}
-        }
+        // }
         this.draw()
     }
     draw() {
@@ -179,6 +179,8 @@ export class Line {
         const bottomWidth = this.c.textWidth(bottomText);
         this.c.text(bottomText, this.x - bottomWidth / 2, this.yEnd + 18);
 
+        this.c.textFont('Arial', 26)
         this.c.text(this.message, this.x, this.yStart - 6);
+        // this.c.
     }
 }
