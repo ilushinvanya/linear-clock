@@ -3,14 +3,12 @@ import { Clock } from './classes/Clock';
 import { Line } from './classes/Line';
 import { Note1, Note2 } from './classes/Notes';
 import {
-	centerX,
-	centerY,
 	clock, gray, lines, linesCount, unit, note1, note2,
 	setCenterX, setCenterY,
 	setClock, setLines, setWidthBetweenLines, setUnit, setLinesCount, setNote1, setNote2
 } from './variables';
 import { DAY, SEC, MIN, HOUR, upLimitLine, downLimitLine } from './constans';
-import { themeToggle } from './utils';
+import { themeToggle, htmlFullScreen } from './utils';
 
 
 let lastMouseY = 0
@@ -23,9 +21,9 @@ const s = ( sketch ) => {
 		setClock(new Clock(sketch));
 		init()
 
-		const note1 = new Note1(Math.floor(Date.now() / unit) * unit + 1000, sketch)
+		const note1 = new Note1(Math.floor(Date.now() / unit) * unit + 20000, sketch)
 		setNote1(note1);
-		const note2 = new Note2(Math.floor(Date.now() / unit) * unit + 70000, sketch)
+		const note2 = new Note2(Math.floor(Date.now() / unit) * unit + 7000, sketch)
 		setNote2(note2);
 	};
 	sketch.draw = () => {
@@ -37,10 +35,6 @@ const s = ( sketch ) => {
 		})
 		note1.update()
 		note2.update()
-		sketch.strokeWeight(1)
-		sketch.stroke('black')
-		// sketch.line(0, centerY, sketch.width, centerY)
-		sketch.line(centerX, 0, centerX, sketch.height)
 		// fpsMeterLoop();
 	};
 	sketch.windowResized = () => {
@@ -120,6 +114,7 @@ function init() {
 	});
     setLines(lines);
 	window.themeToggle = themeToggle;
+	window.htmlFullScreen = htmlFullScreen;
 }
 function mousePress() {
 	console.log('mousePress');

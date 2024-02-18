@@ -2,18 +2,35 @@ import type { p5InstanceExtensions } from 'p5';
 import { centerX, gray, setGray, unit } from './variables';
 import { SEC } from './constans';
 
-export function format(date: number) {
+export function format(date: number, fullDate: boolean = false) {
     // 'HH:mm:ss'
     // 'y.MM.dd.HH.mm.ss'
+    function toText(value: number) {
+        return value >= 10 ? value : '0' + value;
+    }
     const seconds = new Date(date).getSeconds();
+    const secondText = toText(seconds);
+
     const minutes = new Date(date).getMinutes();
+    const minuteText = toText(minutes);
+
     const hours = new Date(date).getHours();
-    const hourText = hours >= 10 ? hours : '0' + hours;
-    const minuteText = minutes >= 10 ? minutes : '0' + minutes;
-    let clockText = `${hourText}:${minuteText}`
+    const hourText = toText(hours);
+
+    const day = new Date(date).getDate();
+    const dayText = toText(day);
+
+    const month = new Date(date).getMonth();
+    const monthText = toText(month);
+
+    const year = new Date(date).getFullYear();
+
+    let clockText = `${hourText}:${minuteText}`;
+    if(fullDate) {
+        return `${year}.${monthText}.${dayText} ${clockText}:${secondText}`
+    }
     if(unit === SEC) {
-        const secondText = seconds >= 10 ? seconds : '0' + seconds;
-        return `${clockText}:${secondText}`;
+        clockText = `${clockText}:${secondText}`;
     }
     return clockText;
 }
@@ -33,7 +50,6 @@ export const generateColorWOpacity = (r:number,g:number,b:number, x:number) => {
 }
 export const printAtCenter = (str: string, y: number, lineHeight: number, c: p5InstanceExtensions) => {
     const lines = str.split('\n');
-    // const lineHeight = 15;
 
     for (let i = 0; i < lines.length; i++) {
         const txtWidth = c.textWidth(lines[i]);
@@ -41,29 +57,17 @@ export const printAtCenter = (str: string, y: number, lineHeight: number, c: p5I
         c.text(lines[i], x, y + (i*lineHeight) );
     }
 }
-// const printAtLeft = (str, y, offset, lineHeight) => {
-//     const lines = str.split('\n');
-//     // const lineHeight = 16;
-//
-//     for (let i = 0; i < lines.length; i++) {
-//         // const lineHeight = c.measureText(lines[i]).actualBoundingBoxDescent;
-//         text(lines[i], offset, y + (i * lineHeight));
-//     }
-// }
-// const printAtRight = (str, y, offset, lineHeight) => {
-//     const lines = str.split('\n');
-//     // const lineHeight = 16;
-//
-//     for (let i = 0; i < lines.length; i++) {
-//         const lineWidth = textWidth(lines[i]);
-//         const x = width - lineWidth - offset;
-//         text(lines[i], x, y + (i * lineHeight));
-//     }
-// }
 
-window.htmlFullScreen = () => {
+export const htmlFullScreen = () => {
     const html = document.documentElement;
-    fullScreen(html);
+    if (document.fullscreenElement) {
+        document
+            .exitFullscreen()
+            .then(() => console.log("Document Exited from Full screen mode"))
+            .catch((err) => console.error(err));
+    } else {
+        fullScreen(html);
+    }
 }
 const fullScreen = (element: Element) => {
     if(element.requestFullscreen) {
@@ -73,11 +77,20 @@ const fullScreen = (element: Element) => {
     } else if(element.mozRequestFullscreen) {
         element.mozRequestFullScreen();
     }
+    if('orientation' in screen) {
+        screen.orientation.lock('landscape');
+    }
 }
 
 export const themeToggle = () => {
-    if(gray === 245) setGray(45)
-    else if(gray === 45) setGray(245)
+    if(gray === 245) {
+        setGray(45)
+        document.getElementById('tools')?.classList.add('dark')
+    }
+    else if(gray === 45) {
+        setGray(245)
+        document.getElementById('tools')?.classList.remove('dark')
+    }
 }
 
 let prevTime = Date.now(),

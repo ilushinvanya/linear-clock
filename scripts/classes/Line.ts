@@ -52,7 +52,7 @@ export class Line {
 
         this.x = 0;
 
-        this.yStart = centerY - 60;
+        this.yStart = centerY - 62;
         this.yEnd = centerY + 40;
 
         this.pxDiff = widthBetweenLines / unit; // сколько пикселей в 1000 - одной милисекунде, 60 000  - одной секунде
@@ -177,10 +177,7 @@ export class Line {
         const fs = calcFS > 0 ? calcFS : 1
         this.c.textFont('Arial', fs)
         const bottomWidth = this.c.textWidth(bottomText);
-        this.c.text(bottomText, this.x - bottomWidth / 2, this.yEnd + 14);
-
-
-
+        this.c.text(bottomText, this.x - bottomWidth / 2, this.yEnd + 18);
 
         this.c.text(this.message, this.x, this.yStart - 6);
     }

@@ -23,37 +23,46 @@ export class Note2 extends Note {
     draw(){
         const that = this.hasLine
         if(that) {
-            const lineColor = generateColorWOpacity(0,0,0, that.isFuture ? that.x : 0);
-            this.c.stroke(lineColor)
-            this.c.strokeWeight(1)
+            const red = generateColorWOpacity(222, 69, 84, that.x);
+            const gray = generateColorWOpacity(200, 200, 200, that.x);
+
             let start= {
                 x: centerX,
-                y: centerY
+                y: (centerY + centerY / 2) - 30
             };
-            let cp1 = { x: that.x,   y: centerY + 20  };
-            let cp2 = { x: that.x,   y: centerY + 90  };
-            let end = { x: that.x,   y: centerY + 10};
+            let cp1 = {
+                x: centerX,
+                y: centerY + 80
+            };
+            let cp2 = {
+                x: that.x,
+                y: (centerY + centerY / 2) - 30
+            };
+            let end = {
+                x: that.x,
+                y: centerY + 80
+            };
+            this.c.stroke(that.isPast ? gray : red);
+            this.c.strokeWeight(1)
 
-            // down older
             this.c.noFill();
             this.c.bezier(start.x, start.y, cp1.x, cp1.y, cp2.x, cp2.y, end.x, end.y)
-            this.c.fill(lineColor);
             this.c.line(end.x + 6, end.y + 6, end.x, end.y);
             this.c.line(end.x - 6, end.y + 6, end.x, end.y);
-            // up older
 
-            this.c.textFont('Arial', 14)
             this.c.strokeWeight(0)
-            this.c.fill(generateColorWOpacity(0,0,0, that.x));
+            this.c.textFont('Arial', 18)
+
+            this.c.fill(red);
             let str = 'Вот эта секунда больше никогда не повторится \n' +
-                ' Она уникальная раз в жизни \n Её координаты ' + format(that.date);
+                ' Она уникальная раз в жизни \n Её координаты ' + format(that.date, true);
 
             if(that.isPast) {
+                this.c.textFont('Arial', 26)
+                this.c.fill(gray);
                 str = 'Всё, она прошла'
             }
-            // text(str, centerX, centerY + 70);
-            printAtCenter(str, centerY + 70, 20, this.c);
-
+            printAtCenter(str, centerY + centerY / 2, 24, this.c);
         }
     }
 }
