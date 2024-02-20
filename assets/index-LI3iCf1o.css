@@ -1,1 +1,0 @@
-*{padding:0;margin:0}body{position:fixed;width:100%;height:100%;overscroll-behavior:contain}canvas{display:block;cursor:crosshair}#tools{position:absolute;bottom:0;left:0;z-index:99}#tools button{padding:16px;margin:4px;font-size:22px}#tools.dark button{background:#2d2c2c;color:#fff;border:0;box-shadow:0 1px 7px #fff;border-radius:9px}
