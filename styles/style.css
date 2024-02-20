@@ -19,9 +19,9 @@ canvas {
 	z-index: 99;
 }
 #tools button {
-	padding: 16px;
-	margin: 4px;
-	font-size: 22px;
+	padding: 12px;
+	margin: 6px;
+	font-size: 18px;
 }
 #tools.dark button {
 	background: #2d2c2c;

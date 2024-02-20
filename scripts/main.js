@@ -3,6 +3,7 @@ import { Clock } from './classes/Clock';
 import { Line } from './classes/Line';
 import { Note1, Note2 } from './classes/Notes';
 import {
+	centerX, centerY,
 	clock, gray, lines, linesCount, unit, note1, note2,
 	setCenterX, setCenterY,
 	setClock, setLines, setWidthBetweenLines, setUnit, setLinesCount, setNote1, setNote2
@@ -21,9 +22,9 @@ const s = ( sketch ) => {
 		setClock(new Clock(sketch));
 		init()
 
-		const note1 = new Note1(Math.floor(Date.now() / unit) * unit + 20000, sketch)
+		const note1 = new Note1(Math.floor(Date.now() / unit) * unit + 10000, sketch)
 		setNote1(note1);
-		const note2 = new Note2(Math.floor(Date.now() / unit) * unit + 7000, sketch)
+		const note2 = new Note2(Math.floor(Date.now() / unit) * unit + 60000, sketch)
 		setNote2(note2);
 	};
 	sketch.draw = () => {
@@ -35,6 +36,14 @@ const s = ( sketch ) => {
 		})
 		note1.update()
 		note2.update()
+
+		// sketch.strokeWeight(1)
+		// sketch.stroke('black')
+		// sketch.line(0, centerY, sketch.width, centerY)
+		// sketch.line(centerX, 0, centerX, sketch.height)
+		//
+		// sketch.line(0, centerY + 60, sketch.width, centerY + 60)
+		// sketch.line(0, (centerY + centerY / 2), sketch.width, (centerY + centerY / 2))
 		// fpsMeterLoop();
 	};
 	sketch.windowResized = () => {
