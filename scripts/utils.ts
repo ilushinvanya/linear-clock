@@ -64,7 +64,7 @@ export const htmlFullScreen = () => {
         document
             .exitFullscreen()
             .then(() => {
-                document.getElementById('themeBtn')?.classList.remove('active')
+                document.getElementById('fullscreenBtn')?.classList.remove('active')
             })
             .catch((err) => console.error(err));
     } else {
@@ -104,7 +104,7 @@ export const themeToggle = () => {
 
 let prevTime = Date.now(),
 	frames = 0;
-function fpsMeterLoop() {
+export function fpsMeterLoop() {
 	const time = Date.now();
 	frames++;
 	if (time > prevTime + 1000) {
