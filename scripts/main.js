@@ -38,17 +38,19 @@ const s = ( sketch ) => {
 		c.mouseClicked(mousePress);
 		setCenterX(sketch.width / 2);
 		setCenterY(sketch.height / 2);
+
 		const diff =  sketch.height - (centerY + 60);
 		const heightOfBottom = centerY + 60 + (diff / 2);
 		setTextLineCenterY(heightOfBottom);
+
 		setClock(new Clock(sketch));
 		init(sketch)
 
-		// const offsetTimeSec = 6000
-		// const note1 = new Note1(normalizeTime() + offsetTimeSec, sketch)
-		// setNote1(note1);
+		const offsetTimeSec = 20000
+		const note1 = new Note1(normalizeTime() + offsetTimeSec, sketch)
+		setNote1(note1);
 
-		const offset2TimeSec = 4000
+		const offset2TimeSec = 120000
 		const note2 = new Note2(normalizeTime() + offset2TimeSec, sketch)
 		setNote2(note2);
 	};
