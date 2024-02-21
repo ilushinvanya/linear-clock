@@ -90,8 +90,7 @@ export class Line {
         this.x = centerX - timeDiff * this.pxDiff;
         this.isPast = timeDiff >= 0;
         if(this.isFuture && this.isPast) {
-            // console.log(Date.now())
-            navigator.vibrate(20)
+            navigator.vibrate(10)
         }
         this.isFuture = timeDiff < 0;
 
@@ -155,7 +154,7 @@ export class Line {
                 this.isMinute ? this.minutes :
                     this.isHour ? this.hours :
                         this.isDay ? this.days :
-                            this.isMonth ? this.month :
+                            this.isMonth ? this.month + 1 :
                                 this.isYear ? this.year : 0;
 
         const topText = (unit === SEC && !this.isSecond) ||
@@ -185,6 +184,5 @@ export class Line {
 
         this.c.textFont('Arial', 26)
         this.c.text(this.message, this.x, this.yStart - 6);
-        // this.c.
     }
 }
