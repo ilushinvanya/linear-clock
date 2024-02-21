@@ -27,7 +27,7 @@ export const setWidthBetweenLines = (val: number) => { widthBetweenLines = val }
 
 
 
-export let linesCount = 20; // 1 minute = 60 sec
+export let linesCount = 21; // 1 minute = 60 sec
 export const setLinesCount = (val: number) => { linesCount = val };
 
 

@@ -95,7 +95,7 @@ export class Line {
         }
         this.isFuture = timeDiff < 0;
 
-        if(this.x < 0) {
+        if(this.x < -1) {
             const sticks = lines.filter((line, index) => {
                 return index;
             })

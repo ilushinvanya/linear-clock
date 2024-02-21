@@ -1,5 +1,5 @@
 import type { p5InstanceExtensions } from 'p5';
-import { centerX, centerY, lines, gray, textLineCenterY, lang } from '../variables';
+import { centerX, centerY, lines, gray, textLineCenterY, lang, setNote1, setNote2 } from '../variables';
 import { generateColorWOpacity, printAtCenter, format } from '../utils';
 import TEXTS from '../langs';
 
@@ -23,6 +23,13 @@ class Note {
 }
 
 export class Note1 extends Note {
+    update() {
+        this.hasLine = this.getLine();
+        if(this.hasLine && this.hasLine.x < 0) {
+            setNote1(null)
+        }
+        this.draw()
+    }
     draw(){
         const that = this.hasLine
         if(that) {
@@ -91,6 +98,13 @@ export class Note1 extends Note {
 }
 
 export class Note2 extends Note {
+    update() {
+        this.hasLine = this.getLine();
+        if(this.hasLine && this.hasLine.x < 0) {
+            setNote2(null)
+        }
+        this.draw()
+    }
     draw(){
         const that = this.hasLine
         if(that) {
