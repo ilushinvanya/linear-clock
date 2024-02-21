@@ -13,6 +13,7 @@ import {
 	unit,
 	note1,
 	note2,
+	offsetX,
 	setCenterX,
 	setCenterY,
 	setClock,
@@ -22,12 +23,14 @@ import {
 	setLinesCount,
 	setNote1,
 	setNote2,
-	setTextLineCenterY
+	setTextLineCenterY,
+	setOffsetX
 } from './variables';
 import { DAY, SEC, MIN, HOUR, upLimitLine, downLimitLine } from './constans';
 import { themeToggle, htmlFullScreen, normalizeTime, languageToggle, toggleActiveVibrate } from './utils';
 
 
+let lastMouseX = 0
 let lastMouseY = 0
 const s = ( sketch ) => {
 	sketch.setup = () => {
@@ -117,6 +120,15 @@ const s = ( sketch ) => {
 		init(sketch)
 	};
 	sketch.touchMoved = () => {
+		if(sketch.mouseX > lastMouseX) {
+			// right
+			console.log('right')
+			setOffsetX(offsetX + 10)
+		}
+		if(sketch.mouseX < lastMouseX) {
+			// left
+			setOffsetX(offsetX - 10)
+		}
 		if(sketch.mouseY > lastMouseY) {
 			// down
 			sketch.mouseWheel({ delta: -4 })
@@ -126,6 +138,7 @@ const s = ( sketch ) => {
 			sketch.mouseWheel({ delta: 4 })
 		}
 		lastMouseY = sketch.mouseY
+		lastMouseX = sketch.mouseX
 	};
 };
 new p5(s);
@@ -137,7 +150,6 @@ function init(p5) {
 		const lineDate = first_sec_on_display + index * unit
 		let floor = normalizeTime(lineDate, unit);
 		if(unit === DAY) {
-			// var timestamp = date.getTime();
 			floor = new Date(floor).setHours(0);
 		}
 		return new Line(floor, p5)

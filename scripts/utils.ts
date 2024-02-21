@@ -27,7 +27,7 @@ export function format(date: number, fullDate: boolean = false) {
 
     let clockText = `${hourText}:${minuteText}`;
     if(fullDate) {
-        return `${year}.${monthText}.${dayText} ${clockText}:${secondText}`
+        return `${year}.${monthText}.${dayText}-${clockText}:${secondText}`
     }
     if(unit === SEC) {
         clockText = `${clockText}:${secondText}`;
@@ -63,10 +63,13 @@ export const htmlFullScreen = () => {
     if (document.fullscreenElement) {
         document
             .exitFullscreen()
-            .then(() => console.log("Document Exited from Full screen mode"))
+            .then(() => {
+                document.getElementById('themeBtn')?.classList.remove('active')
+            })
             .catch((err) => console.error(err));
     } else {
         fullScreen(html);
+        document.getElementById('fullscreenBtn')?.classList.add('active')
     }
 }
 const fullScreen = (element: Element) => {
@@ -90,10 +93,12 @@ export const themeToggle = () => {
     if(gray === 245) {
         setGray(45)
         document.getElementById('tools')?.classList.add('dark')
+        document.getElementById('themeBtn')?.classList.add('active')
     }
     else if(gray === 45) {
         setGray(245)
         document.getElementById('tools')?.classList.remove('dark')
+        document.getElementById('themeBtn')?.classList.remove('active')
     }
 }
 
@@ -120,6 +125,12 @@ export function languageToggle() {
 }
 
 export function toggleActiveVibrate() {
-    if (isActiveVibrate) setActiveVibrate(false);
-    else if (!isActiveVibrate) setActiveVibrate(true);
+    if (isActiveVibrate) {
+        document.getElementById('vibrateBtn')?.classList.remove('active');
+        setActiveVibrate(false);
+    }
+    else if (!isActiveVibrate) {
+        document.getElementById('vibrateBtn')?.classList.add('active');
+        setActiveVibrate(true);
+    }
 }

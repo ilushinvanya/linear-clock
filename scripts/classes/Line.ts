@@ -4,6 +4,7 @@ import {
     lines,
     centerX,
     centerY,
+    offsetX,
     linesCount,
     isActiveVibrate,
     widthBetweenLines,
@@ -88,7 +89,7 @@ export class Line {
     update() {
         this.pxDiff = widthBetweenLines / unit; // сколько пикселей в одной милисекунде
         const timeDiff = Date.now() - this.date;
-        this.x = centerX - timeDiff * this.pxDiff;
+        this.x = centerX + offsetX - timeDiff * this.pxDiff;
         this.isPast = timeDiff >= 0;
         if(this.isFuture && this.isPast && isActiveVibrate) {
             navigator.vibrate(10)

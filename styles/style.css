@@ -1,6 +1,7 @@
 * {
 	padding: 0;
 	margin: 0;
+	user-select: none;
 }
 body {
 	position: fixed;
@@ -29,4 +30,7 @@ canvas {
 	border: 1px #2d2c2c solid;
 	box-shadow: 0 1px 7px 0 white;
 	border-radius: 9px;
+}
+#tools button.active {
+	background: #0e0d0d;
 }
