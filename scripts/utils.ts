@@ -126,11 +126,11 @@ export function languageToggle() {
 
 export function toggleActiveVibrate() {
     if (isActiveVibrate) {
-        document.getElementById('vibrateBtn')?.classList.remove('active');
+        document.getElementById('vibrateBtn')?.classList.add('active');
         setActiveVibrate(false);
     }
     else if (!isActiveVibrate) {
-        document.getElementById('vibrateBtn')?.classList.add('active');
+        document.getElementById('vibrateBtn')?.classList.remove('active');
         setActiveVibrate(true);
     }
 }

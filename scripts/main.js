@@ -13,7 +13,6 @@ import {
 	unit,
 	note1,
 	note2,
-	offsetX,
 	setCenterX,
 	setCenterY,
 	setClock,
@@ -24,7 +23,6 @@ import {
 	setNote1,
 	setNote2,
 	setTextLineCenterY,
-	setOffsetX
 } from './variables';
 import { DAY, SEC, MIN, HOUR, upLimitLine, downLimitLine } from './constans';
 import { themeToggle, htmlFullScreen, normalizeTime, languageToggle, toggleActiveVibrate } from './utils';
@@ -50,7 +48,7 @@ const s = ( sketch ) => {
 		const note1 = new Note1(normalizeTime() + offsetTimeSec, sketch)
 		setNote1(note1);
 
-		const offset2TimeSec = 120000
+		const offset2TimeSec = 140000
 		const note2 = new Note2(normalizeTime() + offset2TimeSec, sketch)
 		setNote2(note2);
 	};
@@ -122,15 +120,6 @@ const s = ( sketch ) => {
 		init(sketch)
 	};
 	sketch.touchMoved = () => {
-		if(sketch.mouseX > lastMouseX) {
-			// right
-			console.log('right')
-			setOffsetX(offsetX + 10)
-		}
-		if(sketch.mouseX < lastMouseX) {
-			// left
-			setOffsetX(offsetX - 10)
-		}
 		if(sketch.mouseY > lastMouseY) {
 			// down
 			sketch.mouseWheel({ delta: -4 })

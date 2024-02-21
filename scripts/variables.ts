@@ -15,10 +15,6 @@ export const setClock = (val: any) => { clock = val };
 export let centerX = 0;
 export const setCenterX = (val: number) => { centerX = val };
 
-export let offsetX = 0;
-export const setOffsetX = (val: number) => { offsetX = val };
-
-
 export let centerY = 0;
 export const setCenterY = (val: number) => { centerY = val };
 
