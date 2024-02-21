@@ -38,3 +38,9 @@ export const setUnit = (val: number) => { unit = val };
 
 export let gray = 245;
 export const setGray = (val: number) => { gray = val };
+
+export let isActiveVibrate = true;
+export const setActiveVibrate = (val: boolean) => { isActiveVibrate = val };
+
+export let lang = 'en';
+export const setLang = (val: string) => { lang = val };

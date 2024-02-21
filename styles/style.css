@@ -26,7 +26,7 @@ canvas {
 #tools.dark button {
 	background: #2d2c2c;
 	color: white;
-	border: 0;
+	border: 1px #2d2c2c solid;
 	box-shadow: 0 1px 7px 0 white;
 	border-radius: 9px;
 }

@@ -1,5 +1,5 @@
 import type { p5InstanceExtensions } from 'p5';
-import { centerX, gray, setGray, unit } from './variables';
+import { centerX, gray, setGray, setLang, unit, lang, isActiveVibrate, setActiveVibrate } from './variables';
 import { SEC } from './constans';
 
 export function format(date: number, fullDate: boolean = false) {
@@ -72,9 +72,13 @@ export const htmlFullScreen = () => {
 const fullScreen = (element: Element) => {
     if(element.requestFullscreen) {
         element.requestFullscreen();
+        // @ts-ignore
     } else if(element.webkitrequestFullscreen) {
+        // @ts-ignore
         element.webkitRequestFullscreen();
+        // @ts-ignore
     } else if(element.mozRequestFullscreen) {
+        // @ts-ignore
         element.mozRequestFullScreen();
     }
     if('orientation' in screen) {
@@ -108,4 +112,14 @@ function fpsMeterLoop() {
 
 export function normalizeTime(target: number = Date.now(), normal: number = unit) {
     return Math.floor( target / normal) * normal
+}
+
+export function languageToggle() {
+    if (lang === 'ru') setLang('en');
+    else if (lang === 'en') setLang('ru');
+}
+
+export function toggleActiveVibrate() {
+    if (isActiveVibrate) setActiveVibrate(false);
+    else if (!isActiveVibrate) setActiveVibrate(true);
 }

@@ -1,12 +1,13 @@
 import type { p5InstanceExtensions } from 'p5';
 import {
-    centerY,
-    centerX,
-    widthBetweenLines,
     unit,
     lines,
+    centerX,
+    centerY,
     linesCount,
-    setLines
+    isActiveVibrate,
+    widthBetweenLines,
+    setLines,
 } from '../variables';
 import { SEC, MIN, HOUR, DAY, FutureLineColor, PastLineColor, downLimitLine, upLimitLine } from '../constans';
 export class Line {
@@ -89,7 +90,7 @@ export class Line {
         const timeDiff = Date.now() - this.date;
         this.x = centerX - timeDiff * this.pxDiff;
         this.isPast = timeDiff >= 0;
-        if(this.isFuture && this.isPast) {
+        if(this.isFuture && this.isPast && isActiveVibrate) {
             navigator.vibrate(10)
         }
         this.isFuture = timeDiff < 0;

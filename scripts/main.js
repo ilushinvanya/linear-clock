@@ -3,13 +3,29 @@ import { Clock } from './classes/Clock';
 import { Line } from './classes/Line';
 import { Note1, Note2 } from './classes/Notes';
 import {
-	centerX, centerY, textLineCenterY,
-	clock, gray, lines, linesCount, unit, note1, note2,
-	setCenterX, setCenterY,
-	setClock, setLines, setWidthBetweenLines, setUnit, setLinesCount, setNote1, setNote2, setTextLineCenterY
+	centerX,
+	centerY,
+	textLineCenterY,
+	clock,
+	gray,
+	lines,
+	linesCount,
+	unit,
+	note1,
+	note2,
+	setCenterX,
+	setCenterY,
+	setClock,
+	setLines,
+	setWidthBetweenLines,
+	setUnit,
+	setLinesCount,
+	setNote1,
+	setNote2,
+	setTextLineCenterY
 } from './variables';
 import { DAY, SEC, MIN, HOUR, upLimitLine, downLimitLine } from './constans';
-import { themeToggle, htmlFullScreen, normalizeTime } from './utils';
+import { themeToggle, htmlFullScreen, normalizeTime, languageToggle, toggleActiveVibrate } from './utils';
 
 
 let lastMouseY = 0
@@ -109,7 +125,7 @@ const s = ( sketch ) => {
 		lastMouseY = sketch.mouseY
 	};
 };
-new p5(s, '#canvas');
+new p5(s);
 function init(p5) {
 	setWidthBetweenLines(p5.width / linesCount);
 
@@ -126,6 +142,8 @@ function init(p5) {
     setLines(lines);
 	window.themeToggle = themeToggle;
 	window.htmlFullScreen = htmlFullScreen;
+	window.languageToggle = languageToggle;
+	window.toggleActiveVibrate = toggleActiveVibrate;
 }
 function mousePress() {
 	console.log('mousePress');

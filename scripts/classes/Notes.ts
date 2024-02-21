@@ -1,6 +1,8 @@
 import type { p5InstanceExtensions } from 'p5';
-import { centerX, centerY, lines, gray, textLineCenterY } from '../variables';
+import { centerX, centerY, lines, gray, textLineCenterY, lang } from '../variables';
 import { generateColorWOpacity, printAtCenter, format } from '../utils';
+import TEXTS from '../langs';
+
 class Note {
     private readonly date: number;
     readonly c: p5InstanceExtensions;
@@ -19,6 +21,74 @@ class Note {
     }
     draw() {}
 }
+
+export class Note1 extends Note {
+    draw(){
+        const that = this.hasLine
+        if(that) {
+            const offsetTitle = textLineCenterY
+            const offsetSubTitle = textLineCenterY + 26
+            if(that.isPast) {
+                const pastTextTitle = TEXTS.note_1_past_title;
+                const pastTextSubTitle = TEXTS.note_1_past_sub_title;
+
+                this.c.fill(generateColorWOpacity(200, 200, 200, that.x));
+
+                this.c.textFont('Arial', 26);
+                this.c.strokeWeight(0)
+                this.c.text(pastTextTitle, that.x, offsetTitle);
+
+                this.c.textFont('Arial', 18);
+                this.c.strokeWeight(0)
+                this.c.text(pastTextSubTitle, that.x, offsetSubTitle);
+            }
+
+            // console.log(TEXTS)
+            const futureTextTitle = TEXTS.note_1_future_title;
+            const futureTextSubTitle = TEXTS.note_1_future_sub_title;
+
+            // FutureLineColor
+            const red = generateColorWOpacity(222, 69, 84, that.x);
+            this.c.fill(red);
+            this.c.textFont('Arial', 26)
+            this.c.strokeWeight(0)
+
+            // Подстилка под будущее цвета фона
+            const shadowBox = (width: number) => {
+                this.c.fill(gray)
+                this.c.stroke(0)
+                this.c.strokeWeight(0)
+                const y = offsetTitle;
+                const height = 88;
+                this.c.rect(centerX, y - 30, width + 100, height)
+            }
+            if(that.isPast) {
+                // Подстилка под будущее цвета фона
+                const width = this.c.textWidth(futureTextTitle);
+                shadowBox(width)
+
+                // Текст Будущего
+                this.c.fill(red);
+                this.c.text(futureTextTitle, centerX, offsetTitle);
+
+                // Подтекст Будущего
+                this.c.textFont('Arial', 18);
+                this.c.fill(red);
+                this.c.text(futureTextSubTitle, centerX, offsetSubTitle);
+            }
+            if(that.isFuture) {
+                // Заголовок Будущего
+                this.c.text(futureTextTitle, that.x, offsetTitle);
+
+                // Подзаголовок Будущего
+                this.c.textFont('Arial', 18);
+                this.c.text(futureTextSubTitle, that.x, offsetSubTitle);
+            }
+
+        }
+    }
+}
+
 export class Note2 extends Note {
     draw(){
         const that = this.hasLine
@@ -54,81 +124,14 @@ export class Note2 extends Note {
             this.c.textFont('Arial', 18)
 
             this.c.fill(red);
-            let str = 'Вот эта секунда больше никогда не повторится \n' +
-                ' Она уникальная раз в жизни \n Её координаты ' + format(that.date, true);
+            let str = TEXTS.note_2_future + format(that.date, true);
 
             if(that.isPast) {
                 this.c.textFont('Arial', 26)
                 this.c.fill(gray);
-                str = 'Всё, она прошла'
+                str = TEXTS.note_2_past
             }
             printAtCenter(str, textLineCenterY, 24, this.c);
-        }
-    }
-}
-export class Note1 extends Note {
-    draw(){
-        const that = this.hasLine
-        if(that) {
-            const offsetTitle = textLineCenterY
-            const offsetSubTitle = textLineCenterY + 26
-            if(that.isPast) {
-                const pastTextTitle = 'Тут уже прошлое';
-                const pastTextSubTitle = 'Его не изменить, время прошло\nОстались только память, опыт и история';
-
-                this.c.fill(generateColorWOpacity(200, 200, 200, that.x));
-
-                this.c.textFont('Arial', 26);
-                this.c.strokeWeight(0)
-                this.c.text(pastTextTitle, that.x, offsetTitle);
-
-                this.c.textFont('Arial', 18);
-                this.c.strokeWeight(0)
-                this.c.text(pastTextSubTitle, that.x, offsetSubTitle);
-            }
-
-            const futureTextTitle = 'Здесь ещё будущее';
-            const futureTextSubTitle = 'Если делать дела, то на него можно повлиять';
-
-            // FutureLineColor
-            const red = generateColorWOpacity(222, 69, 84, that.x);
-            this.c.fill(red);
-            this.c.textFont('Arial', 26)
-            this.c.strokeWeight(0)
-
-            // Подстилка под будущее цвета фона
-            const shadowBox = (width: number) => {
-                this.c.fill(gray)
-                this.c.stroke(0)
-                this.c.strokeWeight(0)
-                const y = offsetTitle;
-                // const width = this.c.textWidth(futureTextTitle);
-                const height = 88;
-                this.c.rect(centerX, y - 30, width + 100, height)
-            }
-            if(that.isPast) {
-                // Подстилка под будущее цвета фона
-                const width = this.c.textWidth(futureTextTitle);
-                shadowBox(width)
-
-                // Текст Будущего
-                this.c.fill(red);
-                this.c.text(futureTextTitle, centerX, offsetTitle);
-
-                // Подтекст Будущего
-                this.c.textFont('Arial', 18);
-                this.c.fill(red);
-                this.c.text(futureTextSubTitle, centerX, offsetSubTitle);
-            }
-            if(that.isFuture) {
-                // Заголовок Будущего
-                this.c.text(futureTextTitle, that.x, offsetTitle);
-
-                // Подзаголовок Будущего
-                this.c.textFont('Arial', 18);
-                this.c.text(futureTextSubTitle, that.x, offsetSubTitle);
-            }
-
         }
     }
 }
