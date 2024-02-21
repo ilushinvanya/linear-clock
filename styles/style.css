@@ -20,7 +20,7 @@ canvas {
 }
 #tools button {
 	padding: 12px;
-	margin: 6px;
+	margin: 4px 2px;
 	font-size: 18px;
 }
 #tools.dark button {

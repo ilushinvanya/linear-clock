@@ -41,10 +41,15 @@ const s = ( sketch ) => {
 		setClock(new Clock(sketch));
 		init(sketch)
 
-		const note1 = new Note1(normalizeTime() + 20000, sketch)
+		const offsetTimeSec = 20000
+		const note1 = new Note1(normalizeTime() + offsetTimeSec, sketch)
 		setNote1(note1);
-		const note2 = new Note2(normalizeTime() + 60000, sketch)
+
+		const offset2TimeSec = 90000
+		const note2 = new Note2(normalizeTime() + offset2TimeSec, sketch)
 		setNote2(note2);
+
+		screen.orientation.lock('landscape');
 	};
 	sketch.draw = () => {
 		sketch.background(gray);

@@ -26,11 +26,12 @@ export class Note1 extends Note {
     draw(){
         const that = this.hasLine
         if(that) {
+            const Text = TEXTS[lang];
             const offsetTitle = textLineCenterY
             const offsetSubTitle = textLineCenterY + 26
             if(that.isPast) {
-                const pastTextTitle = TEXTS.note_1_past_title;
-                const pastTextSubTitle = TEXTS.note_1_past_sub_title;
+                const pastTextTitle = Text.note_1_past_title;
+                const pastTextSubTitle = Text.note_1_past_sub_title;
 
                 this.c.fill(generateColorWOpacity(200, 200, 200, that.x));
 
@@ -44,8 +45,8 @@ export class Note1 extends Note {
             }
 
             // console.log(TEXTS)
-            const futureTextTitle = TEXTS.note_1_future_title;
-            const futureTextSubTitle = TEXTS.note_1_future_sub_title;
+            const futureTextTitle = Text.note_1_future_title;
+            const futureTextSubTitle = Text.note_1_future_sub_title;
 
             // FutureLineColor
             const red = generateColorWOpacity(222, 69, 84, that.x);
@@ -93,6 +94,7 @@ export class Note2 extends Note {
     draw(){
         const that = this.hasLine
         if(that) {
+            const Text = TEXTS[lang];
             const red = generateColorWOpacity(222, 69, 84, that.x);
             const gray = generateColorWOpacity(200, 200, 200, that.x);
 
@@ -124,12 +126,12 @@ export class Note2 extends Note {
             this.c.textFont('Arial', 18)
 
             this.c.fill(red);
-            let str = TEXTS.note_2_future + format(that.date, true);
+            let str = Text.note_2_future + format(that.date, true);
 
             if(that.isPast) {
                 this.c.textFont('Arial', 26)
                 this.c.fill(gray);
-                str = TEXTS.note_2_past
+                str = Text.note_2_past
             }
             printAtCenter(str, textLineCenterY, 24, this.c);
         }
