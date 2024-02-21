@@ -19,7 +19,8 @@ export const setCenterX = (val: number) => { centerX = val };
 export let centerY = 0;
 export const setCenterY = (val: number) => { centerY = val };
 
-
+export let textLineCenterY = 0;
+export const setTextLineCenterY = (val: number) => { textLineCenterY = val };
 
 export let widthBetweenLines = 0;
 export const setWidthBetweenLines = (val: number) => { widthBetweenLines = val };

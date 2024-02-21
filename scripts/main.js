@@ -3,13 +3,13 @@ import { Clock } from './classes/Clock';
 import { Line } from './classes/Line';
 import { Note1, Note2 } from './classes/Notes';
 import {
-	centerX, centerY,
+	centerX, centerY, textLineCenterY,
 	clock, gray, lines, linesCount, unit, note1, note2,
 	setCenterX, setCenterY,
-	setClock, setLines, setWidthBetweenLines, setUnit, setLinesCount, setNote1, setNote2
+	setClock, setLines, setWidthBetweenLines, setUnit, setLinesCount, setNote1, setNote2, setTextLineCenterY
 } from './variables';
 import { DAY, SEC, MIN, HOUR, upLimitLine, downLimitLine } from './constans';
-import { themeToggle, htmlFullScreen } from './utils';
+import { themeToggle, htmlFullScreen, normalizeTime } from './utils';
 
 
 let lastMouseY = 0
@@ -19,12 +19,15 @@ const s = ( sketch ) => {
 		c.mouseClicked(mousePress);
 		setCenterX(sketch.width / 2);
 		setCenterY(sketch.height / 2);
+		const diff =  sketch.height - (centerY + 60);
+		const heightOfBottom = centerY + 60 + (diff / 2);
+		setTextLineCenterY(heightOfBottom);
 		setClock(new Clock(sketch));
-		init()
+		init(sketch)
 
-		const note1 = new Note1(Math.floor(Date.now() / unit) * unit + 10000, sketch)
+		const note1 = new Note1(normalizeTime() + 20000, sketch)
 		setNote1(note1);
-		const note2 = new Note2(Math.floor(Date.now() / unit) * unit + 60000, sketch)
+		const note2 = new Note2(normalizeTime() + 60000, sketch)
 		setNote2(note2);
 	};
 	sketch.draw = () => {
@@ -41,16 +44,15 @@ const s = ( sketch ) => {
 		// sketch.stroke('black')
 		// sketch.line(0, centerY, sketch.width, centerY)
 		// sketch.line(centerX, 0, centerX, sketch.height)
-		//
 		// sketch.line(0, centerY + 60, sketch.width, centerY + 60)
-		// sketch.line(0, (centerY + centerY / 2), sketch.width, (centerY + centerY / 2))
+		// sketch.line(0, textLineCenterY, sketch.width, textLineCenterY)
 		// fpsMeterLoop();
 	};
 	sketch.windowResized = () => {
 		sketch.resizeCanvas(sketch.windowWidth, sketch.windowHeight);
 		sketch.setup();
 	};
-	sketch.mouseWheel = () => {
+	sketch.mouseWheel = (event) => {
 		let delta = Math.round(event.delta);
 
 		if(delta > 0) {
@@ -70,7 +72,7 @@ const s = ( sketch ) => {
 			}
 			else {
 				// all_lines = all_lines + Math.ceil(all_lines / 10);
-				setLinesCount(linesCount + 1)
+				setLinesCount(linesCount + delta)
 			}
 		}
 		if(delta < 0) {
@@ -90,36 +92,36 @@ const s = ( sketch ) => {
 			}
 			else {
 				// all_lines = all_lines - Math.ceil(all_lines / 10);
-				setLinesCount(linesCount - 1)
+				setLinesCount(linesCount + delta)
 			}
 		}
-		init()
+		init(sketch)
 	};
 	sketch.touchMoved = () => {
 		if(sketch.mouseY > lastMouseY) {
 			// down
-			sketch.mouseWheel({ delta: -10 })
+			sketch.mouseWheel({ delta: -4 })
 		}
 		if(sketch.mouseY < lastMouseY) {
 			// up
-			sketch.mouseWheel({ delta: 10 })
+			sketch.mouseWheel({ delta: 4 })
 		}
 		lastMouseY = sketch.mouseY
 	};
 };
-window.p5 = new p5(s, '#canvas');
-function init() {
-	setWidthBetweenLines(window.p5.width / linesCount);
+new p5(s, '#canvas');
+function init(p5) {
+	setWidthBetweenLines(p5.width / linesCount);
 
 	let first_sec_on_display = clock.now - (linesCount * unit) / 2;
 	const lines = Array(linesCount).fill('').map((line, index) => {
 		const lineDate = first_sec_on_display + index * unit
-		let floor = Math.floor(lineDate / unit) * unit
+		let floor = normalizeTime(lineDate, unit);
 		if(unit === DAY) {
 			// var timestamp = date.getTime();
 			floor = new Date(floor).setHours(0);
 		}
-		return new Line(floor, window.p5)
+		return new Line(floor, p5)
 	});
     setLines(lines);
 	window.themeToggle = themeToggle;

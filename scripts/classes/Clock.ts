@@ -1,16 +1,16 @@
 import type { p5InstanceExtensions } from 'p5';
 import { centerX, centerY } from '../variables';
 import { SEC, ClockColor } from '../constans';
-import { format } from '../utils';
+import { format, normalizeTime } from '../utils';
 
 export class Clock {
     c;
-    now = Math.floor(Date.now() / SEC) * SEC
+    now = normalizeTime(Date.now(), SEC);
     constructor(sketch: p5InstanceExtensions) {
         this.c = sketch;
     }
     update() {
-        this.now = Math.floor(Date.now() / SEC) * SEC
+        this.now = normalizeTime(Date.now(), SEC);
         this.draw();
     }
     draw() {

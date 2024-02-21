@@ -105,3 +105,7 @@ function fpsMeterLoop() {
 		return fps;
 	}
 }
+
+export function normalizeTime(target: number = Date.now(), normal: number = unit) {
+    return Math.floor( target / normal) * normal
+}

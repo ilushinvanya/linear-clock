@@ -1,5 +1,5 @@
 import type { p5InstanceExtensions } from 'p5';
-import { centerX, centerY, lines, gray } from '../variables';
+import { centerX, centerY, lines, gray, textLineCenterY } from '../variables';
 import { generateColorWOpacity, printAtCenter, format } from '../utils';
 class Note {
     private readonly date: number;
@@ -28,7 +28,7 @@ export class Note2 extends Note {
 
             let start= {
                 x: centerX,
-                y: (centerY + centerY / 2) - 30
+                y: textLineCenterY - 20
             };
             let cp1 = {
                 x: centerX,
@@ -36,7 +36,7 @@ export class Note2 extends Note {
             };
             let cp2 = {
                 x: that.x,
-                y: (centerY + centerY / 2) - 30
+                y: textLineCenterY
             };
             let end = {
                 x: that.x,
@@ -62,7 +62,7 @@ export class Note2 extends Note {
                 this.c.fill(gray);
                 str = 'Всё, она прошла'
             }
-            printAtCenter(str, centerY + centerY / 2, 24, this.c);
+            printAtCenter(str, textLineCenterY, 24, this.c);
         }
     }
 }
@@ -70,8 +70,8 @@ export class Note1 extends Note {
     draw(){
         const that = this.hasLine
         if(that) {
-            const offsetTitle = centerY / 2
-            const offsetSubTitle = (centerY / 2) + 26
+            const offsetTitle = textLineCenterY
+            const offsetSubTitle = textLineCenterY + 26
             if(that.isPast) {
                 const pastTextTitle = 'Тут уже прошлое';
                 const pastTextSubTitle = 'Его не изменить, время прошло\nОстались только память, опыт и история';
@@ -80,11 +80,11 @@ export class Note1 extends Note {
 
                 this.c.textFont('Arial', 26);
                 this.c.strokeWeight(0)
-                this.c.text(pastTextTitle, that.x, centerY + offsetTitle);
+                this.c.text(pastTextTitle, that.x, offsetTitle);
 
                 this.c.textFont('Arial', 18);
                 this.c.strokeWeight(0)
-                this.c.text(pastTextSubTitle, that.x, centerY + offsetSubTitle);
+                this.c.text(pastTextSubTitle, that.x, offsetSubTitle);
             }
 
             const futureTextTitle = 'Здесь ещё будущее';
@@ -101,7 +101,7 @@ export class Note1 extends Note {
                 this.c.fill(gray)
                 this.c.stroke(0)
                 this.c.strokeWeight(0)
-                const y = centerY + offsetTitle;
+                const y = offsetTitle;
                 // const width = this.c.textWidth(futureTextTitle);
                 const height = 88;
                 this.c.rect(centerX, y - 30, width + 100, height)
@@ -113,20 +113,20 @@ export class Note1 extends Note {
 
                 // Текст Будущего
                 this.c.fill(red);
-                this.c.text(futureTextTitle, centerX, centerY + offsetTitle);
+                this.c.text(futureTextTitle, centerX, offsetTitle);
 
                 // Подтекст Будущего
                 this.c.textFont('Arial', 18);
                 this.c.fill(red);
-                this.c.text(futureTextSubTitle, centerX, centerY + offsetSubTitle);
+                this.c.text(futureTextSubTitle, centerX, offsetSubTitle);
             }
             if(that.isFuture) {
                 // Заголовок Будущего
-                this.c.text(futureTextTitle, that.x, centerY + offsetTitle);
+                this.c.text(futureTextTitle, that.x, offsetTitle);
 
                 // Подзаголовок Будущего
                 this.c.textFont('Arial', 18);
-                this.c.text(futureTextSubTitle, that.x, centerY + offsetSubTitle);
+                this.c.text(futureTextSubTitle, that.x, offsetSubTitle);
             }
 
         }
