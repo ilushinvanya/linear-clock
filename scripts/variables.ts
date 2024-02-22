@@ -41,5 +41,5 @@ export const setGray = (val: number) => { gray = val };
 export let isActiveVibrate = true;
 export const setActiveVibrate = (val: boolean) => { isActiveVibrate = val };
 
-export let lang: 'ru' | 'en' = 'en';
+export let lang: 'ru' | 'en' = 'ru';
 export const setLang = (val: 'ru' | 'en') => { lang = val };
