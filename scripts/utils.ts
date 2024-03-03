@@ -20,7 +20,7 @@ export function format(date: number, fullDate: boolean = false) {
     const day = new Date(date).getDate();
     const dayText = toText(day);
 
-    const month = new Date(date).getMonth();
+    const month = new Date(date).getMonth() + 1;
     const monthText = toText(month);
 
     const year = new Date(date).getFullYear();

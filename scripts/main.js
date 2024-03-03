@@ -111,6 +111,10 @@ const s = ( sketch ) => {
 					setUnit(SEC)
 					setLinesCount(upLimitLine)
 				}
+				else if(unit === SEC) {
+					setUnit(SEC)
+					setLinesCount(downLimitLine)
+				}
 			}
 			else {
 				// all_lines = all_lines - Math.ceil(all_lines / 10);
