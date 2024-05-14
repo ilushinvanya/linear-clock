@@ -1,14 +1,10 @@
-# Это линейный циферблат
-## Описание
-Время линейно, а не циклично, один и тот же час не повторяется каждый день, как может показаться на стрелочном циферблате.
+# Линейный циферблат
 
-Каждая секунда, минута и час уникальны и они проходят прямо сейчас
+Это уникальный способ отображения времени, который подчеркивает его непрерывность и неповторяемость. В отличие от традиционных циферблатов со стрелками, где один и тот же момент времени повторяется ежедневно, линейный циферблат показывает, что каждая секунда, минута и час уникальны и не повторяются. Это напоминает нам о быстротечности времени и важности каждого момента.
 
 
 ## Description
-Time is linear, not cyclical, the same hour does not repeat every day, as it might seem on an arrow dial.
-
-Every second, minute and hour is unique and, they are passing right now
+This is a unique way of displaying time, which emphasizes its continuity and uniqueness. Unlike traditional hand dials, where the same point in time is repeated every day, a linear dial shows that each second, minute and hour is unique and does not repeat itself. It reminds us of the transience of time and the importance of every moment.
 
 
 # Open
