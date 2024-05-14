@@ -33,7 +33,6 @@ export const setLinesCount = (val: number) => {
 };
 
 
-
 export let unit = 1000 // 1 sec difference between lines
 export const setUnit = (val: number) => { unit = val };
 

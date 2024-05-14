@@ -1,6 +1,7 @@
 import type { p5InstanceExtensions } from 'p5';
 import { centerX, centerY, lines, gray, textLineCenterY, lang, setNote1, setNote2 } from '../variables';
-import { generateColorWOpacity, printAtCenter, format } from '../utils';
+import { generateColorWOpacity, printAtCenter, format, hexToRgb } from '../utils';
+import { FutureLineColor, PastLineColor } from '../constans';
 import TEXTS from '../langs';
 
 class Note {
@@ -41,7 +42,8 @@ export class Note1 extends Note {
                 const pastTextTitle = Text.note_1_past_title;
                 const pastTextSubTitle = Text.note_1_past_sub_title;
 
-                this.c.fill(generateColorWOpacity(200, 200, 200, that.x));
+                const { r, g, b } = hexToRgb(PastLineColor)
+                this.c.fill(generateColorWOpacity(r, g, b, that.x));
 
                 this.c.textFont('Arial', 26);
                 this.c.strokeWeight(0)
@@ -57,7 +59,8 @@ export class Note1 extends Note {
             const futureTextSubTitle = Text.note_1_future_sub_title;
 
             // FutureLineColor
-            const red = generateColorWOpacity(222, 69, 84, that.x);
+            const { r, g, b } = hexToRgb(FutureLineColor)
+            const red = generateColorWOpacity(r, g, b, that.x);
             this.c.fill(red);
             this.c.textFont('Arial', 26)
             this.c.strokeWeight(0)
@@ -111,8 +114,12 @@ export class Note2 extends Note {
         const that = this.hasLine
         if(that) {
             const Text = TEXTS[lang];
-            const red = generateColorWOpacity(222, 69, 84, that.x);
-            const gray = generateColorWOpacity(200, 200, 200, that.x);
+
+            const futureTextColor = hexToRgb(FutureLineColor)
+            const red = generateColorWOpacity(futureTextColor.r, futureTextColor.g, futureTextColor.b, that.x);
+
+            const { r, g, b} = hexToRgb(PastLineColor)
+            const gray = generateColorWOpacity(r, g, b, that.x);
 
             let start= {
                 x: centerX,
