@@ -90,7 +90,7 @@ export class Line {
         const timeDiff = Date.now() - this.date;
         this.x = centerX - timeDiff * this.pxDiff;
         this.isPast = timeDiff >= 0;
-        if(this.isFuture && this.isPast && isActiveVibrate) {
+        if(this.isFuture && this.isPast && isActiveVibrate && navigator.vibrate) {
             navigator.vibrate(10)
         }
         this.isFuture = timeDiff < 0;
