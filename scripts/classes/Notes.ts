@@ -68,7 +68,7 @@ export class Note1 extends Note {
                 this.c.strokeWeight(0)
                 const y = offsetTitle;
                 const height = 88;
-                this.c.rect(centerX, y - 30, width + 100, height)
+                this.c.rect(centerX, y - 30, width + 140, height)
             }
             if(that.isPast) {
                 // Подстилка под будущее цвета фона

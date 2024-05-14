@@ -7,20 +7,54 @@
     <meta name="description" content=""/>
     <link href="styles/style.css" rel="stylesheet">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⌚️</text></svg>">
+    <script type="module" src="scripts/main.js"></script>
+    <script>
+        const userLanguage = window.navigator.language;
+
+        if (userLanguage.substring(0, 2) === 'ru') {
+            window.TURN_STRING = 'Переверните телефон';
+            window.OR_STRING = 'или'
+            window.BUTTON_STRING = 'Нажмите сюда'
+            window.FSMODE_STRING = 'для полноэкранного режима'
+            window.FS_BUTTON = 'Во весь экран'
+            window.THEME_BUTTON = 'Темная тема'
+            window.VIBRATE_BUTTON = 'Вибрацию Выкл'
+        } else if (userLanguage.substring(0, 2) === 'es') {
+            window.TURN_STRING = 'Dale la vuelta a tu teléfono';
+            window.OR_STRING = 'o'
+            window.BUTTON_STRING = 'haga clic aquí'
+            window.FSMODE_STRING = 'para modo de pantalla completa'
+            window.FS_BUTTON = 'Pantalla completa'
+            window.THEME_BUTTON = 'Tema oscuro'
+            window.VIBRATE_BUTTON = 'Desactivar vibración'
+        } else {
+            window.TURN_STRING = 'Turn your phone over';
+            window.OR_STRING = 'or'
+            window.BUTTON_STRING = 'Click here'
+            window.FSMODE_STRING = 'for full screen mode'
+            window.FS_BUTTON = 'Fullscreen'
+            window.THEME_BUTTON = 'Dark mode'
+            window.VIBRATE_BUTTON = 'Vibrate Off'
+        }
+    </script>
 </head>
 <body>
 <div id="warning">
-    <p>Переверните телефон</p>
-    <p>или</p>
+    <p><script>document.write(window.TURN_STRING)</script></p>
+    <p><script>document.write(window.OR_STRING)</script></p>
     <p onclick="htmlFullScreen()">
-        <button>Нажмите сюда</button> для полноэкранного режима</p>
+        <button>
+            <script>document.write(window.BUTTON_STRING)</script>
+        </button>
+        <script>document.write(window.FSMODE_STRING)</script>
+    </p>
 </div>
 <div id="tools">
-    <button id="fullscreenBtn" onclick="htmlFullScreen()">Fullscreen</button>
-    <button id="themeBtn" onclick="themeToggle()">Dark</button>
-    <button id="languageBtn" onclick="languageToggle()">Ru/En</button>
-    <button id="vibrateBtn" onclick="toggleActiveVibrate()">Vibrate Off</button>
+    <button id="fullscreenBtn" onclick="htmlFullScreen()"><script>document.write(window.FS_BUTTON)</script></button>
+    <button id="themeBtn" onclick="themeToggle()"><script>document.write(window.THEME_BUTTON)</script></button>
+    <button id="languageBtn" onclick="languageToggle()">Ru/En/Es</button>
+    <button id="vibrateBtn" onclick="toggleActiveVibrate()"><script>document.write(window.VIBRATE_BUTTON)</script></button>
 </div>
-<script type="module" src="scripts/main.js"></script>
+
 </body>
 </html>

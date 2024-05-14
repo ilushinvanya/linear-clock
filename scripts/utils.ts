@@ -85,6 +85,7 @@ const fullScreen = (element: Element) => {
         element.mozRequestFullScreen();
     }
     if('orientation' in screen) {
+        // @ts-ignore
         screen.orientation.lock('landscape');
     }
 }
@@ -121,7 +122,8 @@ export function normalizeTime(target: number = Date.now(), normal: number = unit
 
 export function languageToggle() {
     if (lang === 'ru') setLang('en');
-    else if (lang === 'en') setLang('ru');
+    else if (lang === 'en') setLang('es');
+    else if (lang === 'es') setLang('ru');
 }
 
 export function toggleActiveVibrate() {

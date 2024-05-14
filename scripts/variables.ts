@@ -41,5 +41,12 @@ export const setGray = (val: number) => { gray = val };
 export let isActiveVibrate = true;
 export const setActiveVibrate = (val: boolean) => { isActiveVibrate = val };
 
-export let lang: 'ru' | 'en' = 'ru';
-export const setLang = (val: 'ru' | 'en') => { lang = val };
+const navigatorLanguage = window.navigator.language;
+const userLanguage = navigatorLanguage.substring(0, 2)
+
+export let lang: 'ru' | 'en' | 'es' = 'ru';
+
+if(userLanguage === 'en') lang = 'en'
+else if(userLanguage === 'es') lang = 'es'
+
+export const setLang = (val: 'ru' | 'en' | 'es') => { lang = val };
