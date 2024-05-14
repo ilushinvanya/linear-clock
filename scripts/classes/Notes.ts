@@ -27,6 +27,7 @@ export class Note1 extends Note {
         this.hasLine = this.getLine();
         if(this.hasLine && this.hasLine.x < 0) {
             setNote1(null)
+            return;
         }
         this.draw()
     }
@@ -102,6 +103,7 @@ export class Note2 extends Note {
         this.hasLine = this.getLine();
         if(this.hasLine && this.hasLine.x < 0) {
             setNote2(null)
+            return;
         }
         this.draw()
     }

@@ -37,6 +37,7 @@ canvas {
 }
 #warning {
   background-color: #fff;
+  background-image: linear-gradient(180deg, #d6dae0 5%, rgba(71,67,137,0) 30%), linear-gradient(0deg, #de4554, rgba(71,67,137,0) 30%);
   background-attachment: fixed;
   background-size: cover;
   position: absolute;
@@ -51,48 +52,36 @@ canvas {
   display: none;
 }
 #warning p {
+  color: #2c2c2c;
   font-size: 38px;
   text-align: center;
   font-family: sans-serif;
   font-weight: 100;
 }
 #warning button {
+  box-shadow: inset 0 1px 0 0 #fff;
+  background: linear-gradient(to bottom, #f9f9f9 5%, #e9e9e9 100%);
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  border: 1px solid #dcdcdc;
+  display: inline-block;
+  cursor: pointer;
+  color: #2c2c2c;
+  font-family: Arial;
   font-size: 32px;
-  padding: 10px;
   font-weight: 100;
+  padding: 6px 24px;
+  text-decoration: none;
+  text-shadow: 0 1px 0 #fff;
 }
-#warning button {
-  box-shadow:inset 0 -3px 7px 0 #29bbff;
-  background:linear-gradient(to bottom, #2dabf9 5%, #0688fa 100%);
-  background-color:#2dabf9;
-  border-radius:3px;
-  border:1px solid #0b0e07;
-  display:inline-block;
-  cursor:pointer;
-  color:#ffffff;
-  font-family:Arial;
-  padding:9px 23px;
-  text-decoration:none;
-  text-shadow:0 1px 0 #263666;
+#warning button hover {
+  background: linear-gradient(to bottom, #e9e9e9 5%, #f9f9f9 100%);
+  background-color: #e9e9e9;
 }
-#warning button:hover {
-  background:linear-gradient(to bottom, #0688fa 5%, #2dabf9 100%);
-  background-color:#0688fa;
+#warning button active {
+  position: relative;
+  top: 1px;
 }
-#warning button:active {
-  position:relative;
-  top:1px;
-}
-
-/*@media all and (display-mode: fullscreen) {*/
-/*@media screen and (orientation:landscape) {*/
-/*	#warning {*/
-/*		display: none !important;*/
-/*	}*/
-/*	html:fullscreen #warning {*/
-/*		display: none !important;*/
-/*	}*/
-/*}*/
 @media screen and (orientation: portrait) {
   #warning {
     display: flex;
