@@ -60,7 +60,7 @@ const s = ( sketch ) => {
 			line.update()
 		})
 		if(note1?.update) note1.update()
-		if(note2?.update) note2.update()
+		if(note2?.update && !note1) note2.update()
 
 		// sketch.strokeWeight(1)
 		// sketch.stroke('black')
