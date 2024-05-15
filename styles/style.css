@@ -36,6 +36,9 @@ canvas {
 #github.dark .dark-img {
   display: none;
 }
+#github.hide {
+  opacity: 0;
+}
 #tools {
   position: absolute;
   top: 6px;
@@ -53,6 +56,7 @@ canvas {
   font-size: 18px;
   border-radius: 9px;
   border: 1px #2d2c2c solid;
+  cursor: pointer;
 }
 #tools button.active {
   background: #dcdcdc;
@@ -66,6 +70,12 @@ canvas {
 #tools.dark button.active {
   background: #1f1d1d;
   color: #e3e3e3;
+}
+#toHide {
+  opacity: 0;
+}
+#toHide.left {
+  opacity: 1;
 }
 #toHide.left div {
   transform: rotate(180deg);

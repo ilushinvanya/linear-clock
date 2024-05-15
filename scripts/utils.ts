@@ -159,8 +159,9 @@ export function hexToRgb(hex: string) {
 export function toggleHideButtons() {
     const tools = document.getElementById('tools')
     const toHideBtn = document.getElementById('toHide')
+    const githubBtn = document.getElementById('github')
     const toolsButtons = document.querySelector('#tools .buttons')
-    if(!tools || !toolsButtons || !toolsButtons) return
+    if(!tools || !toolsButtons || !toolsButtons || !toHideBtn) return
 
     const toolsButtonsWidth = toolsButtons.clientWidth
 
@@ -170,5 +171,6 @@ export function toggleHideButtons() {
         tools.style.left = '-' + toolsButtonsWidth + 'px'
     }
 
-    toHideBtn?.classList.toggle('left')
+    toHideBtn.classList.toggle('left')
+    githubBtn?.classList.toggle('hide')
 }

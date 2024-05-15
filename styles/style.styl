@@ -31,6 +31,8 @@ canvas
 			display block
 		.dark-img
 			display none
+	&.hide
+		opacity 0
 
 #tools
 	position absolute
@@ -47,6 +49,7 @@ canvas
 		font-size 18px
 		border-radius 9px
 		border 1px #2d2c2c solid
+		cursor pointer
 		&.active
 			background #dcdcdc
 			color #414141
@@ -62,7 +65,9 @@ canvas
 
 
 #toHide
+	opacity 0
 	&.left
+		opacity 1
 		div
 			transform rotate(180deg)
 
