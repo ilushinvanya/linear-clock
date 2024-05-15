@@ -46,9 +46,10 @@ export const setActiveVibrate = (val: boolean) => { isActiveVibrate = val };
 const navigatorLanguage = window.navigator.language;
 const userLanguage = navigatorLanguage.substring(0, 2)
 
-export let lang: 'ru' | 'en' | 'es' = 'ru';
+type Langs = 'ru' | 'en' | 'es'
+export let lang: Langs = 'ru';
 
 if(userLanguage === 'en') lang = 'en'
 else if(userLanguage === 'es') lang = 'es'
 
-export const setLang = (val: 'ru' | 'en' | 'es') => { lang = val };
+export const setLang = (val: Langs) => { lang = val };
