@@ -1,39 +1,52 @@
 *
-  padding: 0
-  margin: 0
-  user-select: none
+	padding: 0
+	margin: 0
+	user-select: none
 
 body
-  position: fixed
-  width: 100%
-  height: 100%
-  overscroll-behavior: contain
+	position: fixed
+	width: 100%
+	height: 100%
+	overscroll-behavior: contain
 
 canvas
-  display: block
-  cursor: crosshair
+	display block
+	cursor crosshair
 
 #tools
-  position: absolute
-  top: 0
-  left: 0
-  z-index: 99
+	position absolute
+	top 6px
+	left 6px
+	z-index 99
+	transition left .4s ease
+	display flex
+	&.hide
+		left -470px
+	button
+		padding 12px
+		margin 4px 2px
+		font-size 18px
+		border-radius 9px
+		border 1px #2d2c2c solid
+		&.active
+			background #dcdcdc
+			color #414141
 
-#tools button
-  padding: 12px
-  margin: 4px 2px
-  font-size: 18px
+	&.dark
+		button
+			background #2d2c2c
+			color white
+			border 1px #020101 solid
+			&.active
+				background #1f1d1d
+				color #e3e3e3
 
-#tools.dark button
-  background: #2d2c2c
-  color: white
-  border: 1px #2d2c2c solid
-  box-shadow: 0 1px 7px 0 white
-  border-radius: 9px
 
-#tools button.active
-  background: #1f1d1d
-  color: #e3e3e3
+#toHide
+	&.left
+		div
+			transform rotate(180deg)
+
 
 red-color = #de4554
 gray-color = #d6dae0
@@ -42,57 +55,57 @@ blue-color-transparent = rgba(71, 67, 137, 0)
 green-blur = linear-gradient(180deg, gray-color 5%, blue-color-transparent 30%)
 red-blur = linear-gradient(0deg, red-color, blue-color-transparent 30%)
 colorize-bg()
-  background-color white-color
-  background-image green-blur, red-blur
-  background-attachment fixed
-  background-size cover
+	background-color white-color
+	background-image green-blur, red-blur
+	background-attachment fixed
+	background-size cover
 #warning
-  colorize-bg()
-  position: absolute
-  width: 100%
-  height: 100%
-  left: 0
-  top: 0
-  z-index: 101
-  justify-content: center
-  flex-direction: column
-  align-items: center
-  display: none
+	colorize-bg()
+	position: absolute
+	width: 100%
+	height: 100%
+	left: 0
+	top: 0
+	z-index: 101
+	justify-content: center
+	flex-direction: column
+	align-items: center
+	display: none
 
 #warning p
-  color #2c2c2c
-  font-size 38px
-  text-align center
-  font-family sans-serif
-  font-weight 100
+	color #2c2c2c
+	font-size 38px
+	text-align center
+	font-family sans-serif
+	font-weight 100
 
 
 #warning button
-  box-shadow inset 0 1px 0 0 #ffffff
-  background linear-gradient(to bottom, #f9f9f9 5%, #e9e9e9 100%)
-  background-color #f9f9f9
-  border-radius 6px
-  border 1px solid #dcdcdc
-  display inline-block
-  cursor pointer
-  color #2c2c2c
-  font-family Arial
-  font-size 32px
-  font-weight 100
-  padding 6px 24px
-  text-decoration none
-  text-shadow 0 1px 0 #ffffff
+	box-shadow inset 0 1px 0 0 #ffffff
+	background linear-gradient(to bottom, #f9f9f9 5%, #e9e9e9 100%)
+	background-color #f9f9f9
+	border-radius 6px
+	border 1px solid #dcdcdc
+	display inline-block
+	cursor pointer
+	color #2c2c2c
+	font-family Arial
+	font-size 32px
+	font-weight 100
+	padding 6px 24px
+	text-decoration none
+	text-shadow 0 1px 0 #ffffff
 
 #warning button hover
-  background linear-gradient(to bottom, #e9e9e9 5%, #f9f9f9 100%)
-  background-color #e9e9e9
+	background linear-gradient(to bottom, #e9e9e9 5%, #f9f9f9 100%)
+	background-color #e9e9e9
 
 #warning button active
-  position relative
-  top 1px
+	position relative
+	top 1px
 
 @media screen and (orientation:portrait)
-  #warning
-    display: flex
+	#warning
+		display: flex
 
 

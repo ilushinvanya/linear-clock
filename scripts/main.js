@@ -25,7 +25,14 @@ import {
 	setTextLineCenterY,
 } from './variables';
 import { DAY, SEC, MIN, HOUR, upLimitLine, downLimitLine } from './constans';
-import { themeToggle, htmlFullScreen, normalizeTime, languageToggle, toggleActiveVibrate } from './utils';
+import {
+	themeToggle,
+	htmlFullScreen,
+	normalizeTime,
+	languageToggle,
+	toggleActiveVibrate,
+	toggleHideButtons
+} from './utils';
 
 
 let lastMouseX = 0
@@ -154,7 +161,6 @@ function init(p5) {
 	window.htmlFullScreen = htmlFullScreen;
 	window.languageToggle = languageToggle;
 	window.toggleActiveVibrate = toggleActiveVibrate;
+	window.toggleHideButtons = toggleHideButtons;
 }
-function mousePress() {
-	console.log('mousePress');
-}
+function mousePress() {}

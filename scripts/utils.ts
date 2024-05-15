@@ -154,3 +154,20 @@ export function hexToRgb(hex: string) {
         b: 255
     };
 }
+
+export function toggleHideButtons() {
+    const tools = document.getElementById('tools')
+    const toHideBtn = document.getElementById('toHide')
+    const toolsButtons = document.querySelector('#tools .buttons')
+    if(!tools || !toolsButtons || !toolsButtons) return
+
+    const toolsButtonsWidth = toolsButtons.clientWidth
+
+    if(tools.style.left) {
+        tools.style.left = ''
+    } else {
+        tools.style.left = '-' + toolsButtonsWidth + 'px'
+    }
+
+    toHideBtn?.classList.toggle('left')
+}

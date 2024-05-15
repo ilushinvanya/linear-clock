@@ -50,10 +50,13 @@
     </p>
 </div>
 <div id="tools">
-    <button id="fullscreenBtn" onclick="htmlFullScreen()"><script>document.write(window.FS_BUTTON)</script></button>
-    <button id="themeBtn" onclick="themeToggle()"><script>document.write(window.THEME_BUTTON)</script></button>
-    <button id="languageBtn" onclick="languageToggle()">Ru/En/Es</button>
-    <button id="vibrateBtn" onclick="toggleActiveVibrate()"><script>document.write(window.VIBRATE_BUTTON)</script></button>
+    <div class="buttons">
+        <button id="fullscreenBtn" onclick="htmlFullScreen()"><script>document.write(window.FS_BUTTON)</script></button>
+        <button id="themeBtn" onclick="themeToggle()"><script>document.write(window.THEME_BUTTON)</script></button>
+        <button id="languageBtn" onclick="languageToggle()">Ru/En/Es</button>
+        <button id="vibrateBtn" onclick="toggleActiveVibrate()"><script>document.write(window.VIBRATE_BUTTON)</script></button>
+    </div>
+    <button id="toHide" onclick="toggleHideButtons()" class="left"><div>➔️</div></button>
 </div>
 
 </body>

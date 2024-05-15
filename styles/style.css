@@ -15,25 +15,37 @@ canvas {
 }
 #tools {
   position: absolute;
-  top: 0;
-  left: 0;
+  top: 6px;
+  left: 6px;
   z-index: 99;
+  transition: left 0.4s ease;
+  display: flex;
+}
+#tools.hide {
+  left: -470px;
 }
 #tools button {
   padding: 12px;
   margin: 4px 2px;
   font-size: 18px;
+  border-radius: 9px;
+  border: 1px #2d2c2c solid;
+}
+#tools button.active {
+  background: #dcdcdc;
+  color: #414141;
 }
 #tools.dark button {
   background: #2d2c2c;
   color: #fff;
-  border: 1px #2d2c2c solid;
-  box-shadow: 0 1px 7px 0 #fff;
-  border-radius: 9px;
+  border: 1px #020101 solid;
 }
-#tools button.active {
+#tools.dark button.active {
   background: #1f1d1d;
   color: #e3e3e3;
+}
+#toHide.left div {
+  transform: rotate(180deg);
 }
 #warning {
   background-color: #fff;
