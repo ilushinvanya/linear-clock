@@ -51,7 +51,7 @@ const s = ( sketch ) => {
 		setClock(new Clock(sketch));
 		init(sketch)
 
-		const offsetTimeSec = 20000
+		const offsetTimeSec = 40000
 		const note1 = new Note1(normalizeTime() + offsetTimeSec, sketch)
 		setNote1(note1);
 
