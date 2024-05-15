@@ -93,14 +93,15 @@ const fullScreen = (element: Element) => {
 export const themeToggle = () => {
     if(gray === 245) {
         setGray(45)
-        document.getElementById('tools')?.classList.add('dark')
-        document.getElementById('themeBtn')?.classList.add('active')
+        // document.getElementById('tools')?.classList.add('dark')
+        // document.getElementById('themeBtn')?.classList.add('active')
     }
     else if(gray === 45) {
         setGray(245)
-        document.getElementById('tools')?.classList.remove('dark')
-        document.getElementById('themeBtn')?.classList.remove('active')
     }
+    document.getElementById('tools')?.classList.toggle('dark')
+    document.getElementById('github')?.classList.toggle('dark')
+    document.getElementById('themeBtn')?.classList.toggle('active')
 }
 
 let prevTime = Date.now(),

@@ -13,6 +13,29 @@ canvas {
   display: block;
   cursor: crosshair;
 }
+#github {
+  position: absolute;
+  right: 6px;
+  top: 6px;
+  width: 46px;
+  opacity: 0.3;
+  transition: opacity 0.3s ease;
+}
+#github:hover {
+  opacity: 1;
+}
+#github img {
+  width: 100%;
+}
+#github .light-img {
+  display: none;
+}
+#github.dark .light-img {
+  display: block;
+}
+#github.dark .dark-img {
+  display: none;
+}
 #tools {
   position: absolute;
   top: 6px;
