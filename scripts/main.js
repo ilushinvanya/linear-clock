@@ -39,7 +39,14 @@ let lastMouseX = 0
 let lastMouseY = 0
 const s = ( sketch ) => {
 	sketch.setup = () => {
-		const c = sketch.createCanvas(sketch.windowWidth, sketch.windowHeight);
+		const options = {
+			width: sketch.windowWidth,
+			height: sketch.windowHeight
+		}
+		if(options.height > options.width) {
+			options.height = sketch.windowWidth
+		}
+		const c = sketch.createCanvas(options.width, options.height);
 		c.mouseClicked(mousePress);
 		setCenterX(sketch.width / 2);
 		setCenterY(sketch.height / 2);

@@ -99,6 +99,7 @@ export const themeToggle = () => {
     else if(gray === 45) {
         setGray(245)
     }
+    document.getElementsByTagName('body')[0]?.classList.toggle('dark')
     document.getElementById('tools')?.classList.toggle('dark')
     document.getElementById('github')?.classList.toggle('dark')
     document.getElementById('themeBtn')?.classList.toggle('active')
